@@ -1,0 +1,108 @@
+{
+    "pageSize" : "A4",
+    "orientatation" : "P",
+    "unitLength" : "mm",
+    "margin" : {
+        "left" : 25.4,
+        "top" : 25.4,
+        "right" : 25.4,
+        "bottom" : 25.4
+    },
+    "datasource" : {
+        "type" : "db",
+        "dbType" : "postgresql", 
+        "connStr" : "user=postgres password=admin host=localhost dbname=keisample port=5432 sslmode=disable TimeZone=Asia/Jakarta",
+        "query" : "select * from employee"
+    },
+    "bands" : {
+        "title" : {
+            "height" : 40,
+            "autoSize" : true,
+            "components" : [
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 10,
+                    "top" : 0,
+                    "width" : 100,
+                    "height" : 20,
+                    "expression" : "Simple Report Example",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 14,
+                        "bold" : true,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                }
+            ]
+        },
+        "header" : {
+            "height" : 20,
+            "autoSize" : true,
+            "components" : [
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 10,
+                    "top" : 0,
+                    "width" : 60,
+                    "height" : 20,
+                    "expression" : "Name"
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 70,
+                    "top" : 0,
+                    "width" : 60,
+                    "height" : 20,
+                    "expression" : "Phone No"
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 130,
+                    "top" : 0,
+                    "width" : 60,
+                    "height" : 20,
+                    "expression" : "Join Date"
+                }
+            ]
+        },
+        "detail" : {
+            "height" : 20,
+            "autoSize" : true,
+            "components" : [
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 10,
+                    "top" : 0,
+                    "width" : 100,
+                    "height" : 20,
+                    "expression" : "$F{emp_name}"
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 70,
+                    "top" : 0,
+                    "width" : 100,
+                    "height" : 20,
+                    "expression" : "$F{phone_no}"
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 130,
+                    "top" : 0,
+                    "width" : 100,
+                    "height" : 20,
+                    "expression" : "$F{join_date}"
+                }
+            ]
+        }
+    }
+}
