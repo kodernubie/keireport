@@ -8,6 +8,7 @@ import (
 func TestHello(t *testing.T) {
 
 	rpt, err := LoadFromFile("example/simple.krpt")
+	rpt.Debug = true
 
 	if err == nil {
 

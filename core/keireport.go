@@ -62,6 +62,7 @@ func (o *Margin) Init(config map[string]interface{}) {
 //-------------------------------------------
 
 type Keireport struct {
+	Debug       bool
 	UnitLength  string
 	PageSize    string
 	PageWidth   float64
@@ -299,8 +300,6 @@ func (o *Keireport) Build() error {
 
 		if bandList != nil {
 
-			fmt.Println("Build Title")
-
 			// title
 			band, _ := bandList["title"].(map[string]interface{})
 
@@ -311,8 +310,7 @@ func (o *Keireport) Build() error {
 
 			if err == nil {
 
-				fmt.Println("Build Header")
-
+				// header
 				band, _ := bandList["header"].(map[string]interface{})
 
 				if band != nil {
@@ -323,7 +321,7 @@ func (o *Keireport) Build() error {
 
 			if err == nil {
 
-				fmt.Println("Build Detail")
+				//detail
 				band, _ := bandList["detail"].(map[string]interface{})
 
 				if band != nil {
@@ -339,8 +337,7 @@ func (o *Keireport) Build() error {
 
 			if err == nil {
 
-				fmt.Println("Build Footer")
-
+				// footer
 				band, _ := bandList["footer"].(map[string]interface{})
 
 				if band != nil {
@@ -351,7 +348,10 @@ func (o *Keireport) Build() error {
 		}
 	}
 
-	util.PrettyPrint(o.Pages)
+	if o.Debug {
+
+		//util.PrettyPrint(o.Pages)
+	}
 
 	return err
 }

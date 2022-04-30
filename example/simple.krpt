@@ -12,20 +12,20 @@
         "type" : "db",
         "dbType" : "postgresql", 
         "connStr" : "user=postgres password=admin host=localhost dbname=keisample port=5432 sslmode=disable TimeZone=Asia/Jakarta",
-        "query" : "select * from employee"
+        "query" : "select * from employee order by emp_name asc limit 10"
     },
     "bands" : {
         "title" : {
-            "height" : 40,
+            "height" : 20,
             "autoSize" : true,
             "components" : [
                 {
                     "type" : "label",
                     "printTime" : 0,
-                    "left" : 10,
+                    "left" : 0,
                     "top" : 0,
                     "width" : 100,
-                    "height" : 20,
+                    "height" : 10,
                     "expression" : "Simple Report Example",
                     "font" : {
                         "name" : "Arial",
@@ -39,68 +39,279 @@
             ]
         },
         "header" : {
-            "height" : 20,
+            "height" : 8,
             "autoSize" : true,
             "components" : [
                 {
-                    "type" : "label",
+                    "type" : "rect",
                     "printTime" : 0,
-                    "left" : 10,
+                    "left" : 0,
                     "top" : 0,
                     "width" : 60,
-                    "height" : 20,
-                    "expression" : "Name"
+                    "height" : 8,
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
                 },
                 {
                     "type" : "label",
                     "printTime" : 0,
-                    "left" : 70,
+                    "left" : 5,
+                    "top" : 2,
+                    "width" : 50,
+                    "height" : 6,
+                    "expression" : "Name",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 12,
+                        "bold" : true,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                },
+                {
+                    "type" : "rect",
+                    "printTime" : 0,
+                    "left" : 60,
                     "top" : 0,
                     "width" : 60,
-                    "height" : 20,
-                    "expression" : "Phone No"
+                    "height" : 8,
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
                 },
                 {
                     "type" : "label",
                     "printTime" : 0,
-                    "left" : 130,
-                    "top" : 0,
+                    "left" : 65,
+                    "top" : 2,
                     "width" : 60,
-                    "height" : 20,
-                    "expression" : "Join Date"
+                    "height" : 6,
+                    "expression" : "Phone No",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 12,
+                        "bold" : true,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                },
+                {
+                    "type" : "rect",
+                    "printTime" : 0,
+                    "left" : 120,
+                    "top" : 0,
+                    "width" : 40,
+                    "height" : 8,
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 125,
+                    "top" : 2,
+                    "width" : 40,
+                    "height" : 8,
+                    "expression" : "Join Date",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 12,
+                        "bold" : true,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
                 }
             ]
         },
         "detail" : {
-            "height" : 20,
+            "height" : 8,
             "autoSize" : true,
             "components" : [
                 {
-                    "type" : "label",
+                    "type" : "rect",
                     "printTime" : 0,
-                    "left" : 10,
+                    "left" : 0,
                     "top" : 0,
-                    "width" : 100,
-                    "height" : 20,
-                    "expression" : "$F{emp_name}"
+                    "width" : 60,
+                    "height" : 8,
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
                 },
                 {
                     "type" : "label",
                     "printTime" : 0,
-                    "left" : 70,
+                    "left" : 5,
+                    "top" : 2,
+                    "width" : 50,
+                    "height" : 6,
+                    "expression" : "$F{emp_name}",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 11,
+                        "bold" : false,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                },
+                {
+                    "type" : "rect",
+                    "printTime" : 0,
+                    "left" : 60,
                     "top" : 0,
-                    "width" : 100,
-                    "height" : 20,
-                    "expression" : "$F{phone_no}"
+                    "width" : 60,
+                    "height" : 8,
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
                 },
                 {
                     "type" : "label",
                     "printTime" : 0,
-                    "left" : 130,
+                    "left" : 65,
+                    "top" : 2,
+                    "width" : 50,
+                    "height" : 6,
+                    "expression" : "$F{phone_no}",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 11,
+                        "bold" : false,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                },
+                {
+                    "type" : "rect",
+                    "printTime" : 0,
+                    "left" : 120,
                     "top" : 0,
-                    "width" : 100,
-                    "height" : 20,
-                    "expression" : "$F{join_date}"
+                    "width" : 40,
+                    "height" : 8,
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 125,
+                    "top" : 2,
+                    "width" : 40,
+                    "height" : 6,
+                    "expression" : "$F{join_date}",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 11,
+                        "bold" : false,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                }
+            ]
+        },
+        "footer" : {
+            "height" : 8,
+            "autoSize" : true,
+            "components" : [
+                {
+                    "type" : "rect",
+                    "printTime" : 0,
+                    "left" : 0,
+                    "top" : 0,
+                    "width" : 160,
+                    "height" : 8,
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 5,
+                    "top" : 2,
+                    "width" : 50,
+                    "height" : 6,
+                    "expression" : "Total Employee : 10",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 11,
+                        "bold" : true,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
                 }
             ]
         }

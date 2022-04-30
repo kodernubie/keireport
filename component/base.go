@@ -14,16 +14,16 @@ type Base struct {
 func (o *Base) SetData(config map[string]interface{}) {
 
 	o.Type = util.GetString("type", config)
-	o.Left = util.GetFloat("left", config)
-	o.Top = util.GetFloat("top", config)
-	o.Width = util.GetFloat("width", config)
-	o.Height = util.GetFloat("height", config)
-	o.PrintTime = util.GetInt("printTime", config)
+	o.Left = util.GetFloat("left", config, 0)
+	o.Top = util.GetFloat("top", config, 0)
+	o.Width = util.GetFloat("width", config, 20)
+	o.Height = util.GetFloat("height", config, 20)
+	o.PrintTime = util.GetInt("printTime", config, 0)
 }
 
 func (o *Base) GetType() string {
 
-	return "label"
+	return o.Type
 }
 
 func (o *Base) GetLeft() float64 {
@@ -66,12 +66,12 @@ func (o *Font) Init(config map[string]interface{}) {
 
 	if config != nil {
 
-		o.Name = util.GetString("name", config, "Arial")
-		o.Size = util.GetFloat("size", config, 12)
-		o.Bold = util.GetBool("bold", config, false)
-		o.Underscore = util.GetBool("underscore", config, false)
-		o.Italic = util.GetBool("italic", config, false)
-		o.Strikeout = util.GetBool("strikeout", config, false)
+		o.Name = util.GetString("name", config, o.Name)
+		o.Size = util.GetFloat("size", config, o.Size)
+		o.Bold = util.GetBool("bold", config, o.Bold)
+		o.Underscore = util.GetBool("underscore", config, o.Underscore)
+		o.Italic = util.GetBool("italic", config, o.Italic)
+		o.Strikeout = util.GetBool("strikeout", config, o.Strikeout)
 	}
 }
 
@@ -90,11 +90,27 @@ func (o *Border) Init(config map[string]interface{}) {
 
 	if config != nil {
 
-		o.Width = util.GetFloat("width", config, 0.2)
-		o.Color = util.GetString("color", config, "#000000")
-		o.Left = util.GetBool("left", config, false)
-		o.Top = util.GetBool("top", config, false)
-		o.Right = util.GetBool("right", config, false)
-		o.Bottom = util.GetBool("bottom", config, false)
+		o.Width = util.GetFloat("width", config, o.Width)
+		o.Color = util.GetString("color", config, o.Color)
+		o.Left = util.GetBool("left", config, o.Left)
+		o.Top = util.GetBool("top", config, o.Top)
+		o.Right = util.GetBool("right", config, o.Right)
+		o.Bottom = util.GetBool("bottom", config, o.Bottom)
+	}
+}
+
+//-------------------------------------
+
+type Fill struct {
+	Type  string
+	Color string
+}
+
+func (o *Fill) Init(config map[string]interface{}) {
+
+	if config != nil {
+
+		o.Type = util.GetString("type", config, o.Type)
+		o.Color = util.GetString("color", config, o.Color)
 	}
 }

@@ -12,8 +12,11 @@ import (
 type Label struct {
 	Base
 	Font       *Font
+	AlignVer   string
+	AlignHor   string
 	Value      string
 	Expression string
+	Border     *Border
 }
 
 type LabelBuilder struct {
@@ -25,6 +28,8 @@ func (o *LabelBuilder) Build(template map[string]interface{}, fields map[string]
 
 	ret.Base.SetData(template)
 	ret.Expression = util.GetString("expression", template)
+	ret.AlignHor = util.GetString("alignHor", template, "left")
+	ret.AlignVer = util.GetString("alignVer", template, "top")
 
 	ret.Font = &Font{
 		Name:       "Arial",
@@ -36,6 +41,17 @@ func (o *LabelBuilder) Build(template map[string]interface{}, fields map[string]
 	}
 
 	ret.Font.Init(util.GetMap("font", template))
+
+	ret.Border = &Border{
+		Width:  0.2,
+		Color:  "0x000000",
+		Left:   false,
+		Top:    false,
+		Right:  false,
+		Bottom: false,
+	}
+
+	ret.Border.Init(util.GetMap("border", template))
 
 	if ret.PrintTime == 0 {
 
