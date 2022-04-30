@@ -40,7 +40,51 @@ func (o *LabelExporter) Export(report *core.Keireport, exporter *PDFExporter, co
 
 		exporter.pdf.SetFont(label.Font.Name, style, label.Font.Size)
 		exporter.pdf.SetXY(report.Margin.Left+label.Left, exporter.curBandTop+label.Top)
-		exporter.pdf.Cell(label.Width, label.Height, label.Value)
+
+		border := ""
+
+		if label.Border.Left {
+
+			border += "L"
+		}
+
+		if label.Border.Top {
+
+			border += "T"
+		}
+
+		if label.Border.Right {
+
+			border += "R"
+		}
+
+		if label.Border.Bottom {
+
+			border += "B"
+		}
+
+		align := ""
+
+		switch label.AlignHor {
+		case "left":
+			align += "L"
+		case "right":
+			align += "R"
+		case "center":
+			align += "C"
+		}
+
+		switch label.AlignVer {
+		case "top":
+			align += "T"
+		case "bottom":
+			align += "B"
+		case "middle":
+			align += "M"
+		}
+
+		fill := false
+		exporter.pdf.CellFormat(label.Width, label.Height, label.Value, border, 1, align, fill, 0, "")
 	}
 
 	return err

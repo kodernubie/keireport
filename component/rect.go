@@ -7,6 +7,7 @@ import (
 
 type Rect struct {
 	Base
+	Fill   *Fill
 	Border *Border
 }
 
@@ -30,6 +31,13 @@ func (o *RectBuilder) Build(template map[string]interface{}, fields map[string]i
 
 	ret.Border.Init(util.GetMap("border", template))
 
+	ret.Fill = &Fill{
+		Type:  "transparent",
+		Color: "#FFFFFF",
+	}
+
+	ret.Fill.Init(util.GetMap("fill", template))
+
 	if ret.PrintTime == 0 {
 
 		o.Update(ret, fields)
@@ -41,12 +49,6 @@ func (o *RectBuilder) Build(template map[string]interface{}, fields map[string]i
 func (o *RectBuilder) Update(comp interface{}, fields map[string]interface{}) error {
 
 	var ret error
-
-	// rect, ok := comp.(*Rect)
-
-	// if ok {
-
-	// }
 
 	return ret
 }
