@@ -2,7 +2,6 @@ package pdf
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -39,8 +38,8 @@ func (o *PDFExporter) IsHandling(fileName string) bool {
 
 func (o *PDFExporter) doExport(report *core.Keireport) error {
 
-	o.tempDir, _ = ioutil.TempDir("dir", "prefix")
-	defer os.RemoveAll(o.tempDir)
+	o.tempDir, _ = os.MkdirTemp("", "keireport")
+	fmt.Println("tmpdir===>", o.tempDir)
 
 	o.pdf = fpdf.New(report.Orientation, report.UnitLength, report.PageSize, o.tempDir)
 	o.pdf.SetFont("Arial", "", 12)
@@ -57,12 +56,15 @@ func (o *PDFExporter) doExport(report *core.Keireport) error {
 
 		if err == nil {
 
-			jsonFile := filepath.Join(o.tempDir, filepath.Base(targetPath))
+			jsonFile := filepath.Base(targetPath)
+
 			if pos := strings.LastIndexByte(jsonFile, '.'); pos != -1 {
 				jsonFile = jsonFile[:pos]
 			}
 
 			jsonFile += ".json"
+
+			fmt.Println(jsonFile)
 
 			o.pdf.AddFont(name, "", jsonFile)
 			o.pdf.AddFont(name, "B", jsonFile)
@@ -104,6 +106,7 @@ func (o *PDFExporter) ExportToFile(report *core.Keireport, fileName string) erro
 		err = o.pdf.OutputFileAndClose(fileName)
 	}
 
+	defer os.RemoveAll(o.tempDir)
 	return err
 }
 
