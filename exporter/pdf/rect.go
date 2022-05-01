@@ -91,5 +91,5 @@ func (o *RectExporter) Export(report *core.Keireport, exporter *PDFExporter, com
 
 func init() {
 
-	RegisterComponent("rect", &RectExporter{})
+	RegisterExporter("rect", &RectExporter{})
 }

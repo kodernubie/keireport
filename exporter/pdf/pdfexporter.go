@@ -89,7 +89,7 @@ func (o *PDFExporter) Export(report *core.Keireport) ([]byte, error) {
 
 }
 
-func RegisterComponent(name string, component PDFCompExporter) {
+func RegisterExporter(name string, component PDFCompExporter) {
 
 	PDFComponentMap[name] = component
 }

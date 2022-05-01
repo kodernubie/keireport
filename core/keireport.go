@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 
 	"github.com/kodernubie/keireport/util"
 )
@@ -62,19 +63,21 @@ func (o *Margin) Init(config map[string]interface{}) {
 //-------------------------------------------
 
 type Keireport struct {
-	Debug       bool
-	UnitLength  string
-	PageSize    string
-	PageWidth   float64
-	PageHeight  float64
-	Orientation string
-	Margin      *Margin
-	MaxHeight   float64
-	Template    map[string]interface{}
-	CurrRow     map[string]interface{}
-	DataSource  DataSource
-	Pages       []*Page
-	CurrentPage *Page
+	BaseDir      string
+	Debug        bool
+	TemplateFile string
+	UnitLength   string
+	PageSize     string
+	PageWidth    float64
+	PageHeight   float64
+	Orientation  string
+	Margin       *Margin
+	MaxHeight    float64
+	Template     map[string]interface{}
+	CurrRow      map[string]interface{}
+	DataSource   DataSource
+	Pages        []*Page
+	CurrentPage  *Page
 }
 
 type ComponentBuilder interface {
@@ -94,11 +97,28 @@ var datasourceMap map[string]DataSourceBuilder = map[string]DataSourceBuilder{}
 
 // Keireport --------------------------------------------------------------
 
+func (o *Keireport) GetResource(fileName string) string {
+
+	baseDir := o.BaseDir
+
+	if o.TemplateFile != "" {
+
+		baseDir, _ = filepath.Abs(filepath.Dir(o.TemplateFile))
+	} else if baseDir == "" {
+
+		baseDir, _ = os.Getwd()
+		baseDir, _ = filepath.Abs(baseDir)
+	}
+
+	return filepath.Join(baseDir, fileName)
+}
+
 func (o *Keireport) LoadFromFile(fileName string) error {
 
 	var err error
 
 	b, err := ioutil.ReadFile(fileName)
+	o.TemplateFile = fileName
 
 	if err != nil {
 
@@ -106,6 +126,8 @@ func (o *Keireport) LoadFromFile(fileName string) error {
 		path, _ := os.Getwd()
 
 		b, err = ioutil.ReadFile(path + "/" + fileName)
+
+		o.TemplateFile = path + "/" + fileName
 	}
 
 	if err == nil {
@@ -350,7 +372,7 @@ func (o *Keireport) Build() error {
 
 	if o.Debug {
 
-		//util.PrettyPrint(o.Pages)
+		util.PrettyPrint(o.Pages)
 	}
 
 	return err
