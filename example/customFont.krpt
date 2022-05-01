@@ -1,0 +1,365 @@
+{
+    "pageSize" : "A4",
+    "orientatation" : "P",
+    "unitLength" : "mm",
+    "margin" : {
+        "left" : 25.4,
+        "top" : 25.4,
+        "right" : 25.4,
+        "bottom" : 25.4
+    },
+    "datasource" : {
+        "type" : "empty"
+    },
+    "fonts" : {
+        "OleoScript" : "OleoScriptSwashCaps-Regular.ttf"
+    },
+    "bands" : {
+        "title" : {
+            "height" : 20,
+            "autoSize" : true,
+            "components" : [
+                {
+                    "type" : "image",
+                    "printTime" : 0,
+                    "left" : 0,
+                    "top" : 0,
+                    "width" : 15,
+                    "height" : 15,
+                    "src" : "pdf.png" 
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 20,
+                    "top" : 2,
+                    "width" : 100,
+                    "height" : 10,
+                    "expression" : "Custom Font Example",
+                    "font" : {
+                        "name" : "OleoScript",
+                        "size" : 14,
+                        "bold" : true,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 20,
+                    "top" : 8,
+                    "width" : 100,
+                    "height" : 10,
+                    "expression" : "Showing custom font embedding and empty datasource for report without data",
+                    "font" : {
+                        "name" : "OleoScript",
+                        "size" : 11,
+                        "bold" : false,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 20,
+                    "top" : 14,
+                    "width" : 100,
+                    "height" : 10,
+                    "expression" : "Change \"printWhenEmpty\" field to true/false to see the effect ",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 11,
+                        "bold" : false,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                }
+            ]
+        },
+        "header" : {
+            "height" : 8,
+            "autoSize" : true,
+            "printWhenEmpty" : false,
+            "components" : [
+                {
+                    "type" : "rect",
+                    "printTime" : 0,
+                    "left" : 0,
+                    "top" : 0,
+                    "width" : 60,
+                    "height" : 8,
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 5,
+                    "top" : 2,
+                    "width" : 50,
+                    "height" : 6,
+                    "expression" : "Name",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 12,
+                        "bold" : true,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                },
+                {
+                    "type" : "rect",
+                    "printTime" : 0,
+                    "left" : 60,
+                    "top" : 0,
+                    "width" : 60,
+                    "height" : 8,
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 65,
+                    "top" : 2,
+                    "width" : 60,
+                    "height" : 6,
+                    "expression" : "Phone No",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 12,
+                        "bold" : true,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                },
+                {
+                    "type" : "rect",
+                    "printTime" : 0,
+                    "left" : 120,
+                    "top" : 0,
+                    "width" : 40,
+                    "height" : 8,
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 125,
+                    "top" : 2,
+                    "width" : 40,
+                    "height" : 8,
+                    "expression" : "Join Date",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 12,
+                        "bold" : true,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                }
+            ]
+        },
+        "detail" : {
+            "height" : 8,
+            "autoSize" : true,
+            "printWhenEmpty" : false,
+            "components" : [
+                {
+                    "type" : "rect",
+                    "printTime" : 0,
+                    "left" : 0,
+                    "top" : 0,
+                    "width" : 60,
+                    "height" : 8,
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 5,
+                    "top" : 2,
+                    "width" : 50,
+                    "height" : 6,
+                    "expression" : "$F{emp_name}",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 11,
+                        "bold" : false,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                },
+                {
+                    "type" : "rect",
+                    "printTime" : 0,
+                    "left" : 60,
+                    "top" : 0,
+                    "width" : 60,
+                    "height" : 8,
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 65,
+                    "top" : 2,
+                    "width" : 50,
+                    "height" : 6,
+                    "expression" : "$F{phone_no}",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 11,
+                        "bold" : false,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                },
+                {
+                    "type" : "rect",
+                    "printTime" : 0,
+                    "left" : 120,
+                    "top" : 0,
+                    "width" : 40,
+                    "height" : 8,
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 125,
+                    "top" : 2,
+                    "width" : 40,
+                    "height" : 6,
+                    "expression" : "$F{join_date}",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 11,
+                        "bold" : false,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                }
+            ]
+        },
+        "footer" : {
+            "height" : 8,
+            "autoSize" : true,
+            "printWhenEmpty" : false,
+            "components" : [
+                {
+                    "type" : "rect",
+                    "printTime" : 0,
+                    "left" : 0,
+                    "top" : 0,
+                    "width" : 160,
+                    "height" : 8,
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 5,
+                    "top" : 2,
+                    "width" : 50,
+                    "height" : 6,
+                    "expression" : "Total Employee : 10",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 11,
+                        "bold" : true,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                }
+            ]
+        }     
+    }
+}

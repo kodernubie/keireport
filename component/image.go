@@ -43,22 +43,28 @@ func (o *ImageBuilder) Update(comp interface{}, fields map[string]interface{}) e
 
 		target := image.Src
 
-		for key, val := range fields {
+		if fields == nil {
 
-			valStr := ""
+			target = regexField.ReplaceAllString(target, "")
+		} else {
 
-			switch val.(type) {
-			case float64:
-				valStr = fmt.Sprintf("%f", val.(float64))
-			case float32:
-				valStr = fmt.Sprintf("%f", val.(float32))
-			case time.Time:
-				valStr = val.(time.Time).Format("2006-01-02")
-			default:
-				valStr = fmt.Sprintf("%v", val)
+			for key, val := range fields {
+
+				valStr := ""
+
+				switch val.(type) {
+				case float64:
+					valStr = fmt.Sprintf("%f", val.(float64))
+				case float32:
+					valStr = fmt.Sprintf("%f", val.(float32))
+				case time.Time:
+					valStr = val.(time.Time).Format("2006-01-02")
+				default:
+					valStr = fmt.Sprintf("%v", val)
+				}
+
+				target = strings.ReplaceAll(target, "$F{"+key+"}", valStr)
 			}
-
-			target = strings.ReplaceAll(target, "$F{"+key+"}", valStr)
 		}
 
 		image.Value = target

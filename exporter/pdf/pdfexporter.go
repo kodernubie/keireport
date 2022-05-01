@@ -2,6 +2,9 @@ package pdf
 
 import (
 	"fmt"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/go-pdf/fpdf"
@@ -10,6 +13,7 @@ import (
 
 type PDFExporter struct {
 	pdf        *fpdf.Fpdf
+	tempDir    string
 	curBandTop float64
 }
 
@@ -35,9 +39,37 @@ func (o *PDFExporter) IsHandling(fileName string) bool {
 
 func (o *PDFExporter) doExport(report *core.Keireport) error {
 
-	o.pdf = fpdf.New(report.Orientation, report.UnitLength, report.PageSize, "")
+	o.tempDir, _ = ioutil.TempDir("dir", "prefix")
+	defer os.RemoveAll(o.tempDir)
+
+	o.pdf = fpdf.New(report.Orientation, report.UnitLength, report.PageSize, o.tempDir)
 	o.pdf.SetFont("Arial", "", 12)
 	var err error
+
+	// process font
+	for name, target := range report.Fonts {
+
+		targetPath := report.GetResource(target)
+
+		mapFile := filepath.Join(o.tempDir, "cp1252.map")
+		os.WriteFile(mapFile, []byte(encStr["cp1252"]), 0644)
+		err := fpdf.MakeFont(targetPath, mapFile, o.tempDir, nil, true)
+
+		if err == nil {
+
+			jsonFile := filepath.Join(o.tempDir, filepath.Base(targetPath))
+			if pos := strings.LastIndexByte(jsonFile, '.'); pos != -1 {
+				jsonFile = jsonFile[:pos]
+			}
+
+			jsonFile += ".json"
+
+			o.pdf.AddFont(name, "", jsonFile)
+			o.pdf.AddFont(name, "B", jsonFile)
+			o.pdf.AddFont(name, "I", jsonFile)
+			o.pdf.AddFont(name, "BI", jsonFile)
+		}
+	}
 
 	for _, page := range report.Pages {
 
