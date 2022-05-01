@@ -78,7 +78,7 @@ func (o *DBDatasource) Next() (map[string]interface{}, error) {
 			return o.Rows[o.RowNo], nil
 		} else {
 
-			err = errors.New("End of row")
+			err = core.ErrEndOfRow
 		}
 	}
 

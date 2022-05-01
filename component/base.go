@@ -1,6 +1,17 @@
 package component
 
-import "github.com/kodernubie/keireport/util"
+import (
+	"regexp"
+
+	"github.com/kodernubie/keireport/util"
+)
+
+var regexField *regexp.Regexp
+
+func init() {
+
+	regexField, _ = regexp.Compile(`\$F\{[A-Za-z1-90_]+\}`)
+}
 
 type Base struct {
 	Type      string

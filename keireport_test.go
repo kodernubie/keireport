@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestHello(t *testing.T) {
+func TestSimple(t *testing.T) {
 
 	rpt, err := LoadFromFile("example/simple.krpt")
 	rpt.Debug = true
@@ -13,6 +13,25 @@ func TestHello(t *testing.T) {
 	if err == nil {
 
 		err = rpt.GenToFile("example/simple.pdf")
+
+		if err != nil {
+
+			fmt.Println("Error generate :", err.Error())
+		}
+	} else {
+
+		fmt.Println("Error load template :", err.Error())
+	}
+}
+
+func TestFont(t *testing.T) {
+
+	rpt, err := LoadFromFile("example/customFont.krpt")
+	rpt.Debug = true
+
+	if err == nil {
+
+		err = rpt.GenToFile("example/customFont.pdf")
 
 		if err != nil {
 

@@ -11,6 +11,8 @@ import (
 	"github.com/kodernubie/keireport/util"
 )
 
+var ErrEndOfRow = errors.New("End of row")
+
 type Component interface {
 	GetType() string
 	GetLeft() float64
@@ -75,6 +77,7 @@ type Keireport struct {
 	MaxHeight    float64
 	Template     map[string]interface{}
 	CurrRow      map[string]interface{}
+	Fonts        map[string]string
 	DataSource   DataSource
 	Pages        []*Page
 	CurrentPage  *Page
@@ -179,30 +182,27 @@ func (o *Keireport) BuildBand(bandTemplate map[string]interface{}) error {
 
 	comps := util.GetArr("components", bandTemplate)
 
-	if comps != nil {
+	for _, comp := range comps {
 
-		for _, comp := range comps {
+		compData := comp.(map[string]interface{})
+		compType := util.GetString("type", compData)
 
-			compData := comp.(map[string]interface{})
-			compType := util.GetString("type", compData)
+		builder := builderMap[compType]
 
-			builder := builderMap[compType]
+		if builder != nil {
 
-			if builder != nil {
+			targetComp, err := builder.Build(compData, o.CurrRow)
 
-				targetComp, err := builder.Build(compData, o.CurrRow)
+			if err == nil {
 
-				if err == nil {
-
-					band.Components = append(band.Components, targetComp)
-				} else {
-
-					fmt.Print("[Error] Build comp error : ", err)
-				}
+				band.Components = append(band.Components, targetComp)
 			} else {
 
-				fmt.Println("[Error] Comp builder not found", compType)
+				fmt.Print("[Error] Build comp error : ", err)
 			}
+		} else {
+
+			fmt.Println("[Error] Comp builder not found", compType)
 		}
 	}
 
@@ -249,8 +249,8 @@ func (o *Keireport) Build() error {
 
 	// global config
 	o.PageSize = util.GetString("pageSize", o.Template, "A4")
-	o.Orientation = util.GetString("orientation", o.Template)
-	o.UnitLength = util.GetString("unitLength", o.Template)
+	o.Orientation = util.GetString("orientation", o.Template, "P")
+	o.UnitLength = util.GetString("unitLength", o.Template, "mm")
 
 	switch o.PageSize {
 	case "A4":
@@ -311,60 +311,108 @@ func (o *Keireport) Build() error {
 		}
 	}
 
+	o.Fonts = map[string]string{}
+	fontList := util.GetMap("fonts", o.Template)
+
+	for name, target := range fontList {
+
+		targetS, ok := target.(string)
+
+		if ok {
+			o.Fonts[name] = targetS
+		}
+	}
+
 	if err == nil {
 		o.Pages = []*Page{}
 		o.NewPage()
 
-		var dataErr error
-		o.CurrRow, dataErr = o.DataSource.Next()
+		o.CurrRow, err = o.DataSource.Next()
 
-		bandList, _ := o.Template["bands"].(map[string]interface{})
+		empty := o.CurrRow == nil
 
-		if bandList != nil {
+		if err == nil || empty {
 
-			// title
-			band, _ := bandList["title"].(map[string]interface{})
+			bandList, _ := o.Template["bands"].(map[string]interface{})
 
-			if band != nil {
+			if bandList != nil {
 
-				err = o.BuildBand(band)
-			}
-
-			if err == nil {
-
-				// header
-				band, _ := bandList["header"].(map[string]interface{})
+				// title
+				band, _ := bandList["title"].(map[string]interface{})
 
 				if band != nil {
 
 					err = o.BuildBand(band)
 				}
-			}
 
-			if err == nil {
+				if err == nil {
 
-				//detail
-				band, _ := bandList["detail"].(map[string]interface{})
+					// header
+					band, _ := bandList["header"].(map[string]interface{})
 
-				if band != nil {
+					if band != nil {
 
-					for err == nil && dataErr == nil {
+						if empty {
 
-						err = o.BuildBand(band)
+							if util.GetBool("printWhenEmpty", band, false) {
+								err = o.BuildBand(band)
+							}
+						} else {
 
-						o.CurrRow, dataErr = o.DataSource.Next()
+							err = o.BuildBand(band)
+						}
 					}
 				}
-			}
 
-			if err == nil {
+				if err == nil {
 
-				// footer
-				band, _ := bandList["footer"].(map[string]interface{})
+					//detail
+					band, _ := bandList["detail"].(map[string]interface{})
 
-				if band != nil {
+					if band != nil {
 
-					err = o.BuildBand(band)
+						if empty {
+
+							if util.GetBool("printWhenEmpty", band, false) {
+								err = o.BuildBand(band)
+							}
+						} else {
+
+							for err == nil {
+
+								err = o.BuildBand(band)
+
+								if err == nil {
+
+									o.CurrRow, err = o.DataSource.Next()
+								}
+							}
+
+							if errors.Is(err, ErrEndOfRow) {
+
+								err = nil
+							}
+						}
+					}
+				}
+
+				if err == nil {
+
+					// footer
+					band, _ := bandList["footer"].(map[string]interface{})
+
+					if band != nil {
+
+						if empty {
+
+							if util.GetBool("printWhenEmpty", band, false) {
+								err = o.BuildBand(band)
+							}
+						} else {
+
+							err = o.BuildBand(band)
+						}
+					}
 				}
 			}
 		}
@@ -372,7 +420,7 @@ func (o *Keireport) Build() error {
 
 	if o.Debug {
 
-		util.PrettyPrint(o.Pages)
+		//util.PrettyPrint(o.Pages)
 	}
 
 	return err
