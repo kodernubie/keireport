@@ -8,6 +8,8 @@ Golang based reporting engine. Generating PDF, HTML, Docx and more using simple 
   - Datasource : DB, CSV
   - Label, Rect, Image
   - Parameterized value in text, image
+  - Custom font embedding
+  - Generate to PDF, HTML 
 
 View our [roadmap](https://github.com/kodernubie/keireport#roadmap) for upcoming feature
 
