@@ -1,7 +1,8 @@
 package pdf
 
 import (
-	"fmt"
+	"bufio"
+	"bytes"
 	"os"
 	"path/filepath"
 	"strings"
@@ -39,7 +40,6 @@ func (o *PDFExporter) IsHandling(fileName string) bool {
 func (o *PDFExporter) doExport(report *core.Keireport) error {
 
 	o.tempDir, _ = os.MkdirTemp("", "keireport")
-	fmt.Println("tmpdir===>", o.tempDir)
 
 	o.pdf = fpdf.New(report.Orientation, report.UnitLength, report.PageSize, o.tempDir)
 	o.pdf.SetFont("Arial", "", 12)
@@ -63,8 +63,6 @@ func (o *PDFExporter) doExport(report *core.Keireport) error {
 			}
 
 			jsonFile += ".json"
-
-			fmt.Println(jsonFile)
 
 			o.pdf.AddFont(name, "", jsonFile)
 			o.pdf.AddFont(name, "B", jsonFile)
@@ -100,13 +98,13 @@ func (o *PDFExporter) doExport(report *core.Keireport) error {
 func (o *PDFExporter) ExportToFile(report *core.Keireport, fileName string) error {
 
 	err := o.doExport(report)
+	defer os.RemoveAll(o.tempDir)
 
 	if err == nil {
 
 		err = o.pdf.OutputFileAndClose(fileName)
 	}
 
-	defer os.RemoveAll(o.tempDir)
 	return err
 }
 
@@ -114,14 +112,20 @@ func (o *PDFExporter) Export(report *core.Keireport) ([]byte, error) {
 
 	var ret []byte
 	err := o.doExport(report)
+	defer os.RemoveAll(o.tempDir)
 
 	if err == nil {
 
-		fmt.Println("generate byte array")
+		buff := bytes.Buffer{}
+		writer := bufio.NewWriter(&buff)
+
+		o.pdf.Output(writer)
+
+		writer.Flush()
+		ret = buff.Bytes()
 	}
 
 	return ret, err
-
 }
 
 func RegisterExporter(name string, component PDFCompExporter) {
