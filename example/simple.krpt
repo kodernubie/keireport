@@ -20,10 +20,19 @@
             "autoSize" : true,
             "components" : [
                 {
-                    "type" : "label",
+                    "type" : "image",
                     "printTime" : 0,
                     "left" : 0,
                     "top" : 0,
+                    "width" : 15,
+                    "height" : 15,
+                    "src" : "pdf.png" 
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 20,
+                    "top" : 2,
                     "width" : 100,
                     "height" : 10,
                     "expression" : "Simple Report Example",
@@ -33,6 +42,23 @@
                         "bold" : true,
                         "underscore" : false,
                         "italic" : false,
+                        "strikeout" : false 
+                    } 
+                },
+                {
+                    "type" : "label",
+                    "printTime" : 0,
+                    "left" : 20,
+                    "top" : 8,
+                    "width" : 100,
+                    "height" : 10,
+                    "expression" : "Showing basic feature : band, label, rect, image",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 11,
+                        "bold" : false,
+                        "underscore" : false,
+                        "italic" : true,
                         "strikeout" : false 
                     } 
                 }

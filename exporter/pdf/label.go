@@ -92,5 +92,5 @@ func (o *LabelExporter) Export(report *core.Keireport, exporter *PDFExporter, co
 
 func init() {
 
-	RegisterComponent("label", &LabelExporter{})
+	RegisterExporter("label", &LabelExporter{})
 }
