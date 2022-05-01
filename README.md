@@ -9,12 +9,12 @@ Golang based reporting engine. Generating PDF, HTML, Docx and more using simple 
   - Label, Rect, Image
   - Parameterized value in text, image
 
-View our roadmap for upcoming feature
+View our [roadmap](https://github.com/kodernubie/keireport#roadmap) for upcoming feature
 
 ## Related Project
 
   - [KeiReport Designer](https://github.com/kodernubie/keireport-designer)
-  - [Keireport Server](https://github.com/kodernubie/keireport-server)
+  - [KeiReport Server](https://github.com/kodernubie/keireport-server)
 
 ## Installation
 
