@@ -14,12 +14,12 @@ func init() {
 }
 
 type Base struct {
-	Type      string
-	Left      float64
-	Top       float64
-	Width     float64
-	Height    float64
-	PrintTime int
+	Type    string
+	Left    float64
+	Top     float64
+	Width   float64
+	Height  float64
+	PrintOn string
 }
 
 func (o *Base) SetData(config map[string]interface{}) {
@@ -29,7 +29,7 @@ func (o *Base) SetData(config map[string]interface{}) {
 	o.Top = util.GetFloat("top", config, 0)
 	o.Width = util.GetFloat("width", config, 20)
 	o.Height = util.GetFloat("height", config, 20)
-	o.PrintTime = util.GetInt("printTime", config, 0)
+	o.PrintOn = util.GetString("printOn", config, "now")
 }
 
 func (o *Base) GetType() string {
@@ -57,9 +57,9 @@ func (o *Base) GetHeight() float64 {
 	return o.Height
 }
 
-func (o *Base) GetPrintTime() int {
+func (o *Base) GetPrintOn() string {
 
-	return o.PrintTime
+	return o.PrintOn
 }
 
 //-------------------------------------

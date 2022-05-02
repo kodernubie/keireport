@@ -38,7 +38,7 @@ func (o *RectBuilder) Build(template map[string]interface{}, fields map[string]i
 
 	ret.Fill.Init(util.GetMap("fill", template))
 
-	if ret.PrintTime == 0 {
+	if ret.PrintOn == "now" {
 
 		o.Update(ret, fields)
 	}

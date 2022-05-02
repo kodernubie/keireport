@@ -11,7 +11,21 @@ func main() {
 }
 
 /*
-	Embed custom TTF font. See "fonts" field for detail
+	Simple load template and generate to pdf
+	Database connection using config in template file
+*/
+func simple() {
+
+	rpt, err := keireport.LoadFromFile("simple.krpt")
+
+	if err == nil {
+
+		rpt.GenToFile("simple.pdf")
+	}
+}
+
+/*
+	Embed external TTF font. See "fonts" field for detail
 	Using empty datasource
 	You can change band printin behavior when datasource is empty
 	by changing "printWhenEmpty" field
@@ -23,19 +37,5 @@ func customFont() {
 	if err == nil {
 
 		rpt.GenToFile("customFont.pdf")
-	}
-}
-
-/*
-	Simple load template and generate to pdf
-	Database connection using config in template file
-*/
-func simple() {
-
-	rpt, err := keireport.LoadFromFile("simple.krpt")
-
-	if err == nil {
-
-		rpt.GenToFile("simple.pdf")
 	}
 }

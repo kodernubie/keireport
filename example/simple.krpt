@@ -21,7 +21,7 @@
             "components" : [
                 {
                     "type" : "image",
-                    "printTime" : 0,
+                    "printOn" : "now",
                     "left" : 0,
                     "top" : 0,
                     "width" : 15,
@@ -30,7 +30,7 @@
                 },
                 {
                     "type" : "label",
-                    "printTime" : 0,
+                    "printOn" : "now",
                     "left" : 20,
                     "top" : 2,
                     "width" : 100,
@@ -47,7 +47,7 @@
                 },
                 {
                     "type" : "label",
-                    "printTime" : 0,
+                    "printOn" : "now",
                     "left" : 20,
                     "top" : 8,
                     "width" : 100,
@@ -70,7 +70,7 @@
             "components" : [
                 {
                     "type" : "rect",
-                    "printTime" : 0,
+                    "printOn" : "now",
                     "left" : 0,
                     "top" : 0,
                     "width" : 60,
@@ -90,7 +90,7 @@
                 },
                 {
                     "type" : "label",
-                    "printTime" : 0,
+                    "printOn" : "now",
                     "left" : 5,
                     "top" : 2,
                     "width" : 50,
@@ -107,7 +107,7 @@
                 },
                 {
                     "type" : "rect",
-                    "printTime" : 0,
+                    "printOn" : "now",
                     "left" : 60,
                     "top" : 0,
                     "width" : 60,
@@ -127,7 +127,7 @@
                 },
                 {
                     "type" : "label",
-                    "printTime" : 0,
+                    "printOn" : "now",
                     "left" : 65,
                     "top" : 2,
                     "width" : 60,
@@ -144,7 +144,7 @@
                 },
                 {
                     "type" : "rect",
-                    "printTime" : 0,
+                    "printOn" : "now",
                     "left" : 120,
                     "top" : 0,
                     "width" : 40,
@@ -164,7 +164,7 @@
                 },
                 {
                     "type" : "label",
-                    "printTime" : 0,
+                    "printOn" : "now",
                     "left" : 125,
                     "top" : 2,
                     "width" : 40,
@@ -187,7 +187,7 @@
             "components" : [
                 {
                     "type" : "rect",
-                    "printTime" : 0,
+                    "printOn" : "now",
                     "left" : 0,
                     "top" : 0,
                     "width" : 60,
@@ -207,7 +207,7 @@
                 },
                 {
                     "type" : "label",
-                    "printTime" : 0,
+                    "printOn" : "now",
                     "left" : 5,
                     "top" : 2,
                     "width" : 50,
@@ -224,7 +224,7 @@
                 },
                 {
                     "type" : "rect",
-                    "printTime" : 0,
+                    "printOn" : "now",
                     "left" : 60,
                     "top" : 0,
                     "width" : 60,
@@ -244,7 +244,7 @@
                 },
                 {
                     "type" : "label",
-                    "printTime" : 0,
+                    "printOn" : "now",
                     "left" : 65,
                     "top" : 2,
                     "width" : 50,
@@ -261,7 +261,7 @@
                 },
                 {
                     "type" : "rect",
-                    "printTime" : 0,
+                    "printOn" : "now",
                     "left" : 120,
                     "top" : 0,
                     "width" : 40,
@@ -281,7 +281,7 @@
                 },
                 {
                     "type" : "label",
-                    "printTime" : 0,
+                    "printOn" : "now",
                     "left" : 125,
                     "top" : 2,
                     "width" : 40,
@@ -304,7 +304,7 @@
             "components" : [
                 {
                     "type" : "rect",
-                    "printTime" : 0,
+                    "printOn" : "now",
                     "left" : 0,
                     "top" : 0,
                     "width" : 160,
@@ -324,7 +324,7 @@
                 },
                 {
                     "type" : "label",
-                    "printTime" : 0,
+                    "printOn" : "now",
                     "left" : 5,
                     "top" : 2,
                     "width" : 50,
