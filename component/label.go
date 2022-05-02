@@ -53,7 +53,7 @@ func (o *LabelBuilder) Build(template map[string]interface{}, fields map[string]
 
 	ret.Border.Init(util.GetMap("border", template))
 
-	if ret.PrintTime == 0 {
+	if ret.PrintOn == "now" {
 
 		o.Update(ret, fields)
 	}

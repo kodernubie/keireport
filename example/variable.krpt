@@ -9,35 +9,63 @@
         "bottom" : 25.4
     },
     "datasource" : {
-        "type" : "empty"
+        "type" : "db",
+        "dbType" : "postgresql", 
+        "connStr" : "user=postgres password=admin host=localhost dbname=keisample port=5432 sslmode=disable TimeZone=Asia/Jakarta",
+        "query" : "select gd.good_name, ti.sell_price, ti.amount from trx_items ti left join goods gd on gd.id = ti.good_id  where trx_id = 1"
     },
-    "fonts" : {
-        "OleoScript" : "OleoScriptSwashCaps-Regular.ttf"
-    },
+    "params" : [
+        {
+            "name" : "trxId",
+            "type" : "int",
+            "defaultVal" : 0
+        }
+    ],
+    "vars" : [
+        {
+            "name" : "rowNo",
+            "type" : "int",
+            "initialVal" : 0,
+            "expression" : "$V{rowNo} + 1", 
+            "executeOn" : "row"
+        },
+        {
+            "name" : "subTotal",
+            "type" : "int",
+            "initialVal" : 0,
+            "expression" : "$F{sell_price} * $F{amount}", 
+            "executeOn" : "row"
+        },
+        {
+            "name" : "total",
+            "type" : "int",
+            "initialVal" : 0,
+            "expression" : "$V{total} + $V{subTotal}", 
+            "executeOn" : "row"
+        },
+        {
+            "name" : "pageNo",
+            "type" : "int",
+            "initialVal" : 1,
+            "expression" : "$V{pageNo} + 1", 
+            "executeOn" : "page"
+        }
+    ],
     "bands" : {
         "title" : {
             "height" : 20,
             "autoSize" : true,
             "components" : [
                 {
-                    "type" : "image",
-                    "printOn" : "now",
-                    "left" : 0,
-                    "top" : 0,
-                    "width" : 15,
-                    "height" : 15,
-                    "src" : "pdf.png" 
-                },
-                {
                     "type" : "label",
                     "printOn" : "now",
-                    "left" : 20,
+                    "left" : 0,
                     "top" : 2,
                     "width" : 100,
                     "height" : 10,
-                    "expression" : "Custom Font Example",
+                    "expression" : "Variable & Parameter",
                     "font" : {
-                        "name" : "OleoScript",
+                        "name" : "Arial",
                         "size" : 14,
                         "bold" : true,
                         "underscore" : false,
@@ -52,30 +80,13 @@
                     "top" : 8,
                     "width" : 100,
                     "height" : 10,
-                    "expression" : "Showing custom font embedding and empty datasource for report without data",
-                    "font" : {
-                        "name" : "OleoScript",
-                        "size" : 11,
-                        "bold" : false,
-                        "underscore" : false,
-                        "italic" : false,
-                        "strikeout" : false 
-                    } 
-                },
-                {
-                    "type" : "label",
-                    "printOn" : "now",
-                    "left" : 20,
-                    "top" : 14,
-                    "width" : 100,
-                    "height" : 10,
-                    "expression" : "Change \"printWhenEmpty\" field to true/false to see the effect ",
+                    "expression" : "Showing parameter and variable execution",
                     "font" : {
                         "name" : "Arial",
                         "size" : 11,
                         "bold" : false,
                         "underscore" : false,
-                        "italic" : false,
+                        "italic" : true,
                         "strikeout" : false 
                     } 
                 }
@@ -84,7 +95,6 @@
         "header" : {
             "height" : 8,
             "autoSize" : true,
-            "printWhenEmpty" : false,
             "components" : [
                 {
                     "type" : "rect",
@@ -202,7 +212,6 @@
         "detail" : {
             "height" : 8,
             "autoSize" : true,
-            "printWhenEmpty" : false,
             "components" : [
                 {
                     "type" : "rect",
@@ -320,7 +329,6 @@
         "footer" : {
             "height" : 8,
             "autoSize" : true,
-            "printWhenEmpty" : false,
             "components" : [
                 {
                     "type" : "rect",
@@ -360,6 +368,6 @@
                     } 
                 }
             ]
-        }     
+        }
     }
 }

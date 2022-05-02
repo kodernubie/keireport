@@ -19,7 +19,7 @@ type Component interface {
 	GetTop() float64
 	GetWidth() float64
 	GetHeight() float64
-	GetPrintTime() int
+	GetPrintOn() string
 }
 
 type Band struct {
