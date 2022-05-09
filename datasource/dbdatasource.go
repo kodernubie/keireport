@@ -49,7 +49,7 @@ func (o *DBDatasource) SetConfig(data map[string]interface{}) error {
 	return err
 }
 
-func (o *DBDatasource) Next() (map[string]interface{}, error) {
+func (o *DBDatasource) Next(rpt *core.Keireport) (map[string]interface{}, error) {
 
 	var err error
 

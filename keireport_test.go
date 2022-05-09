@@ -42,3 +42,22 @@ func TestFont(t *testing.T) {
 		fmt.Println("Error load template :", err.Error())
 	}
 }
+
+func TestVariable(t *testing.T) {
+
+	rpt, err := LoadFromFile("example/variable.krpt")
+	rpt.Debug = true
+
+	if err == nil {
+
+		err = rpt.GenToFile("example/variable.pdf")
+
+		if err != nil {
+
+			fmt.Println("Error generate :", err.Error())
+		}
+	} else {
+
+		fmt.Println("Error load template :", err.Error())
+	}
+}

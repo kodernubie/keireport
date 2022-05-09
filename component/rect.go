@@ -14,7 +14,7 @@ type Rect struct {
 type RectBuilder struct {
 }
 
-func (o *RectBuilder) Build(template map[string]interface{}, fields map[string]interface{}) (core.Component, error) {
+func (o *RectBuilder) Build(template map[string]interface{}, rpt *core.Keireport) (core.Component, error) {
 
 	ret := &Rect{}
 
@@ -40,13 +40,13 @@ func (o *RectBuilder) Build(template map[string]interface{}, fields map[string]i
 
 	if ret.PrintOn == "now" {
 
-		o.Update(ret, fields)
+		o.Update(ret, rpt)
 	}
 
 	return ret, nil
 }
 
-func (o *RectBuilder) Update(comp interface{}, fields map[string]interface{}) error {
+func (o *RectBuilder) Update(comp interface{}, rpt *core.Keireport) error {
 
 	var ret error
 
