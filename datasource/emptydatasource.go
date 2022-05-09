@@ -12,7 +12,7 @@ func (o *EmptyDatasource) SetConfig(data map[string]interface{}) error {
 	return nil
 }
 
-func (o *EmptyDatasource) Next() (map[string]interface{}, error) {
+func (o *EmptyDatasource) Next(rpt *core.Keireport) (map[string]interface{}, error) {
 
 	return nil, core.ErrEndOfRow
 }

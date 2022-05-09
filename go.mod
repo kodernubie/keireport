@@ -3,6 +3,7 @@ module github.com/kodernubie/keireport
 go 1.18
 
 require (
+	github.com/PaesslerAG/gval v1.1.2 // indirect
 	github.com/go-pdf/fpdf v0.6.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.12.0 // indirect

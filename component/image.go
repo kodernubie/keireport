@@ -1,10 +1,6 @@
 package component
 
 import (
-	"fmt"
-	"strings"
-	"time"
-
 	"github.com/kodernubie/keireport/core"
 	"github.com/kodernubie/keireport/util"
 )
@@ -18,7 +14,7 @@ type Image struct {
 type ImageBuilder struct {
 }
 
-func (o *ImageBuilder) Build(template map[string]interface{}, fields map[string]interface{}) (core.Component, error) {
+func (o *ImageBuilder) Build(template map[string]interface{}, rpt *core.Keireport) (core.Component, error) {
 
 	ret := &Image{}
 
@@ -27,13 +23,13 @@ func (o *ImageBuilder) Build(template map[string]interface{}, fields map[string]
 
 	if ret.PrintOn == "now" {
 
-		o.Update(ret, fields)
+		o.Update(ret, rpt)
 	}
 
 	return ret, nil
 }
 
-func (o *ImageBuilder) Update(comp interface{}, fields map[string]interface{}) error {
+func (o *ImageBuilder) Update(comp interface{}, rpt *core.Keireport) error {
 
 	var ret error
 
@@ -41,33 +37,7 @@ func (o *ImageBuilder) Update(comp interface{}, fields map[string]interface{}) e
 
 	if ok {
 
-		target := image.Src
-
-		if fields == nil {
-
-			target = regexField.ReplaceAllString(target, "")
-		} else {
-
-			for key, val := range fields {
-
-				valStr := ""
-
-				switch val.(type) {
-				case float64:
-					valStr = fmt.Sprintf("%f", val.(float64))
-				case float32:
-					valStr = fmt.Sprintf("%f", val.(float32))
-				case time.Time:
-					valStr = val.(time.Time).Format("2006-01-02")
-				default:
-					valStr = fmt.Sprintf("%v", val)
-				}
-
-				target = strings.ReplaceAll(target, "$F{"+key+"}", valStr)
-			}
-		}
-
-		image.Value = target
+		image.Value = rpt.ReplaceString(image.Src)
 	}
 
 	return ret

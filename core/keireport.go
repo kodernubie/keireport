@@ -7,62 +7,12 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
+	"time"
 
+	"github.com/PaesslerAG/gval"
 	"github.com/kodernubie/keireport/util"
 )
-
-var ErrEndOfRow = errors.New("End of row")
-
-type Component interface {
-	GetType() string
-	GetLeft() float64
-	GetTop() float64
-	GetWidth() float64
-	GetHeight() float64
-	GetPrintOn() string
-}
-
-type Band struct {
-	Top        float64
-	Height     float64
-	AutoSize   bool
-	Components []Component
-}
-
-type Page struct {
-	Bands []*Band
-}
-
-type DataSource interface {
-	SetConfig(data map[string]interface{}) error
-	Next() (map[string]interface{}, error)
-}
-
-type DataSourceBuilder interface {
-	Build(data map[string]interface{}) (DataSource, error)
-}
-
-//------------------------------------------------------
-
-type Margin struct {
-	Left   float64
-	Right  float64
-	Top    float64
-	Bottom float64
-}
-
-func (o *Margin) Init(config map[string]interface{}) {
-
-	if config != nil {
-
-		o.Left = util.GetFloat("name", config, 25.4)
-		o.Top = util.GetFloat("top", config, 25.4)
-		o.Right = util.GetFloat("right", config, 25.4)
-		o.Bottom = util.GetFloat("bottom", config, 25.4)
-	}
-}
-
-//-------------------------------------------
 
 type Keireport struct {
 	BaseDir      string
@@ -74,6 +24,8 @@ type Keireport struct {
 	PageHeight   float64
 	Orientation  string
 	Margin       *Margin
+	Params       []*Parameter
+	Vars         []*Variable
 	MaxHeight    float64
 	Template     map[string]interface{}
 	CurrRow      map[string]interface{}
@@ -82,23 +34,6 @@ type Keireport struct {
 	Pages        []*Page
 	CurrentPage  *Page
 }
-
-type ComponentBuilder interface {
-	Build(template map[string]interface{}, fields map[string]interface{}) (Component, error)
-	Update(comp interface{}, fields map[string]interface{}) error
-}
-
-type Exporter interface {
-	IsHandling(fileName string) bool
-	ExportToFile(report *Keireport, fileName string) error
-	Export(report *Keireport) ([]byte, error)
-}
-
-var builderMap map[string]ComponentBuilder = map[string]ComponentBuilder{}
-var exporterMap map[string]Exporter = map[string]Exporter{}
-var datasourceMap map[string]DataSourceBuilder = map[string]DataSourceBuilder{}
-
-// Keireport --------------------------------------------------------------
 
 func (o *Keireport) GetResource(fileName string) string {
 
@@ -191,7 +126,7 @@ func (o *Keireport) BuildBand(bandTemplate map[string]interface{}) error {
 
 		if builder != nil {
 
-			targetComp, err := builder.Build(compData, o.CurrRow)
+			targetComp, err := builder.Build(compData, o)
 
 			if err == nil {
 
@@ -214,6 +149,12 @@ func (o *Keireport) BuildBand(bandTemplate map[string]interface{}) error {
 	if band.Top+band.Height > o.MaxHeight {
 
 		o.NewPage()
+
+		err = o.updateVar("page")
+
+		if err != nil {
+			return err
+		}
 
 		bandList, _ := o.Template["bands"].(map[string]interface{})
 
@@ -278,6 +219,49 @@ func (o *Keireport) Build() error {
 
 	o.MaxHeight = o.PageHeight - o.Margin.Top - o.Margin.Bottom
 
+	o.Fonts = map[string]string{}
+	fontList := util.GetMap("fonts", o.Template)
+
+	for name, target := range fontList {
+
+		targetS, ok := target.(string)
+
+		if ok {
+			o.Fonts[name] = targetS
+		}
+	}
+
+	o.Params = []*Parameter{}
+	paramList := util.GetArr("params", o.Template)
+
+	for _, item := range paramList {
+
+		target, ok := item.(map[string]interface{})
+
+		if ok {
+
+			par := &Parameter{}
+			par.Init(target)
+
+			o.Params = append(o.Params, par)
+		}
+	}
+
+	o.Vars = []*Variable{}
+	varList := util.GetArr("vars", o.Template)
+
+	for _, item := range varList {
+
+		target, ok := item.(map[string]interface{})
+
+		if ok {
+			varO := &Variable{}
+			varO.Init(target)
+
+			o.Vars = append(o.Vars, varO)
+		}
+	}
+
 	// data source
 	dsTemplate, _ := o.Template["datasource"].(map[string]interface{})
 
@@ -311,27 +295,21 @@ func (o *Keireport) Build() error {
 		}
 	}
 
-	o.Fonts = map[string]string{}
-	fontList := util.GetMap("fonts", o.Template)
-
-	for name, target := range fontList {
-
-		targetS, ok := target.(string)
-
-		if ok {
-			o.Fonts[name] = targetS
-		}
-	}
-
 	if err == nil {
 		o.Pages = []*Page{}
 		o.NewPage()
 
-		o.CurrRow, err = o.DataSource.Next()
+		o.CurrRow, err = o.DataSource.Next(o)
 
 		empty := o.CurrRow == nil
 
 		if err == nil || empty {
+
+			errV := o.updateVar("row")
+
+			if errV != nil {
+				return errV
+			}
 
 			bandList, _ := o.Template["bands"].(map[string]interface{})
 
@@ -384,7 +362,16 @@ func (o *Keireport) Build() error {
 
 								if err == nil {
 
-									o.CurrRow, err = o.DataSource.Next()
+									o.CurrRow, err = o.DataSource.Next(o)
+
+									if err == nil {
+
+										errV := o.updateVar("row")
+
+										if errV != nil {
+											return errV
+										}
+									}
 								}
 							}
 
@@ -420,7 +407,133 @@ func (o *Keireport) Build() error {
 
 	if o.Debug {
 
-		//util.PrettyPrint(o.Pages)
+		// util.PrettyPrint(o.Params)
+		// util.PrettyPrint(o.Vars)
+	}
+
+	return err
+}
+
+func (o *Keireport) ReplaceString(data string) string {
+
+	target := data
+
+	if o.CurrRow == nil {
+
+		target = regexField.ReplaceAllString(target, "")
+	} else {
+
+		for key, val := range o.CurrRow {
+
+			valStr := ""
+
+			switch val.(type) {
+			case float64:
+				valStr = fmt.Sprintf("%f", val.(float64))
+			case float32:
+				valStr = fmt.Sprintf("%f", val.(float32))
+			case time.Time:
+				valStr = val.(time.Time).Format("2006-01-02")
+			default:
+				valStr = fmt.Sprintf("%v", val)
+			}
+
+			target = strings.ReplaceAll(target, "$F{"+key+"}", valStr)
+		}
+	}
+
+	for _, val := range o.Vars {
+
+		valStr := ""
+
+		switch val.Type {
+		case "float":
+			valStr = fmt.Sprintf("%f", val.GetFloat())
+		// case "time":
+		// 	valStr = val.GetTime().Format("2006-01-02")
+		default:
+			valStr = fmt.Sprintf("%v", val.Value)
+		}
+
+		target = strings.ReplaceAll(target, "$V{"+val.Name+"}", valStr)
+	}
+
+	for _, val := range o.Params {
+
+		valStr := ""
+
+		switch val.Type {
+		case "float":
+			valStr = fmt.Sprintf("%f", val.GetFloat())
+		// case "time":
+		// 	valStr = val.GetTime().Format("2006-01-02")
+		default:
+			valStr = fmt.Sprintf("%v", val.Value)
+		}
+
+		target = strings.ReplaceAll(target, "$P{"+val.Name+"}", valStr)
+	}
+
+	return target
+}
+
+func (o *Keireport) ExecScript(script string) (interface{}, error) {
+
+	ret := script
+	retParam := map[string]interface{}{}
+	vars := map[string]interface{}{}
+	params := map[string]interface{}{}
+	fields := map[string]interface{}{}
+
+	// variable
+	for _, varI := range o.Vars {
+
+		ret = strings.ReplaceAll(ret, "$V{"+varI.Name+"}", "vars[\""+varI.Name+"\"]")
+		vars[varI.Name] = varI.Value
+	}
+
+	// parameter
+	for _, varI := range o.Params {
+
+		ret = strings.ReplaceAll(ret, "$P{"+varI.Name+"}", "vars[\""+varI.Name+"\"]")
+		params[varI.Name] = varI.Value
+	}
+
+	// fields
+	for name, val := range o.CurrRow {
+
+		ret = strings.ReplaceAll(ret, "$F{"+name+"}", "fields[\""+name+"\"]")
+		fields[name] = val
+	}
+
+	retParam["vars"] = vars
+	retParam["params"] = params
+	retParam["fields"] = fields
+
+	return gval.Evaluate(ret, retParam)
+}
+
+func (o *Keireport) updateVar(updateOn string) error {
+
+	var err error
+
+	for _, varO := range o.Vars {
+
+		if varO.ExecuteOn == updateOn {
+
+			var ret interface{}
+
+			ret, err = o.ExecScript(varO.Expression)
+
+			if err == nil {
+
+				varO.Value = ret
+			} else {
+
+				fmt.Println(varO.Expression, varO.Name, "===>ERROR EXECUTE==>", err.Error())
+				break
+			}
+		}
 	}
 
 	return err
@@ -475,21 +588,4 @@ func (o *Keireport) GenToFile(fileName string) error {
 	}
 
 	return err
-}
-
-// Register --------------------------------------------------------------
-
-func RegisterComponent(name string, builder ComponentBuilder) {
-
-	builderMap[name] = builder
-}
-
-func RegisterExporter(name string, exporter Exporter) {
-
-	exporterMap[name] = exporter
-}
-
-func RegisterDatasource(name string, ds DataSourceBuilder) {
-
-	datasourceMap[name] = ds
 }

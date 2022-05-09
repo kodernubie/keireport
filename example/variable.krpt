@@ -57,9 +57,18 @@
             "autoSize" : true,
             "components" : [
                 {
-                    "type" : "label",
+                    "type" : "image",
                     "printOn" : "now",
                     "left" : 0,
+                    "top" : 0,
+                    "width" : 15,
+                    "height" : 15,
+                    "src" : "pdf.png" 
+                },
+                {
+                    "type" : "label",
+                    "printOn" : "now",
+                    "left" : 20,
                     "top" : 2,
                     "width" : 100,
                     "height" : 10,
@@ -101,7 +110,7 @@
                     "printOn" : "now",
                     "left" : 0,
                     "top" : 0,
-                    "width" : 60,
+                    "width" : 20,
                     "height" : 8,
                     "fill" : {
                         "type" : "transparent",
@@ -123,7 +132,7 @@
                     "top" : 2,
                     "width" : 50,
                     "height" : 6,
-                    "expression" : "Name",
+                    "expression" : "No",
                     "font" : {
                         "name" : "Arial",
                         "size" : 12,
@@ -136,7 +145,7 @@
                 {
                     "type" : "rect",
                     "printOn" : "now",
-                    "left" : 60,
+                    "left" : 20,
                     "top" : 0,
                     "width" : 60,
                     "height" : 8,
@@ -156,11 +165,11 @@
                 {
                     "type" : "label",
                     "printOn" : "now",
-                    "left" : 65,
+                    "left" : 25,
                     "top" : 2,
-                    "width" : 60,
+                    "width" : 50,
                     "height" : 6,
-                    "expression" : "Phone No",
+                    "expression" : "Goods Name",
                     "font" : {
                         "name" : "Arial",
                         "size" : 12,
@@ -173,9 +182,9 @@
                 {
                     "type" : "rect",
                     "printOn" : "now",
-                    "left" : 120,
+                    "left" : 80,
                     "top" : 0,
-                    "width" : 40,
+                    "width" : 30,
                     "height" : 8,
                     "fill" : {
                         "type" : "transparent",
@@ -193,11 +202,85 @@
                 {
                     "type" : "label",
                     "printOn" : "now",
-                    "left" : 125,
+                    "left" : 85,
                     "top" : 2,
-                    "width" : 40,
+                    "width" : 30,
+                    "height" : 6,
+                    "expression" : "Price",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 12,
+                        "bold" : true,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                },
+                {
+                    "type" : "rect",
+                    "printOn" : "now",
+                    "left" : 110,
+                    "top" : 0,
+                    "width" : 20,
                     "height" : 8,
-                    "expression" : "Join Date",
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
+                },
+                {
+                    "type" : "label",
+                    "printOn" : "now",
+                    "left" : 115,
+                    "top" : 2,
+                    "width" : 20,
+                    "height" : 8,
+                    "expression" : "Amnt",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 12,
+                        "bold" : true,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                },
+                {
+                    "type" : "rect",
+                    "printOn" : "now",
+                    "left" : 130,
+                    "top" : 0,
+                    "width" : 30,
+                    "height" : 8,
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
+                },
+                {
+                    "type" : "label",
+                    "printOn" : "now",
+                    "left" : 135,
+                    "top" : 2,
+                    "width" : 20,
+                    "height" : 8,
+                    "expression" : "Sub Total",
                     "font" : {
                         "name" : "Arial",
                         "size" : 12,
@@ -218,7 +301,7 @@
                     "printOn" : "now",
                     "left" : 0,
                     "top" : 0,
-                    "width" : 60,
+                    "width" : 20,
                     "height" : 8,
                     "fill" : {
                         "type" : "transparent",
@@ -240,10 +323,10 @@
                     "top" : 2,
                     "width" : 50,
                     "height" : 6,
-                    "expression" : "$F{emp_name}",
+                    "expression" : "$V{rowNo}",
                     "font" : {
                         "name" : "Arial",
-                        "size" : 11,
+                        "size" : 12,
                         "bold" : false,
                         "underscore" : false,
                         "italic" : false,
@@ -253,7 +336,7 @@
                 {
                     "type" : "rect",
                     "printOn" : "now",
-                    "left" : 60,
+                    "left" : 20,
                     "top" : 0,
                     "width" : 60,
                     "height" : 8,
@@ -273,11 +356,11 @@
                 {
                     "type" : "label",
                     "printOn" : "now",
-                    "left" : 65,
+                    "left" : 25,
                     "top" : 2,
                     "width" : 50,
                     "height" : 6,
-                    "expression" : "$F{phone_no}",
+                    "expression" : "$F{good_name}",
                     "font" : {
                         "name" : "Arial",
                         "size" : 11,
@@ -290,9 +373,9 @@
                 {
                     "type" : "rect",
                     "printOn" : "now",
-                    "left" : 120,
+                    "left" : 80,
                     "top" : 0,
-                    "width" : 40,
+                    "width" : 30,
                     "height" : 8,
                     "fill" : {
                         "type" : "transparent",
@@ -310,14 +393,88 @@
                 {
                     "type" : "label",
                     "printOn" : "now",
-                    "left" : 125,
+                    "left" : 85,
                     "top" : 2,
-                    "width" : 40,
+                    "width" : 30,
                     "height" : 6,
-                    "expression" : "$F{join_date}",
+                    "expression" : "$F{sell_price}",
                     "font" : {
                         "name" : "Arial",
-                        "size" : 11,
+                        "size" : 12,
+                        "bold" : false,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                },
+                {
+                    "type" : "rect",
+                    "printOn" : "now",
+                    "left" : 110,
+                    "top" : 0,
+                    "width" : 20,
+                    "height" : 8,
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
+                },
+                {
+                    "type" : "label",
+                    "printOn" : "now",
+                    "left" : 115,
+                    "top" : 2,
+                    "width" : 20,
+                    "height" : 8,
+                    "expression" : "$F{amount}",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 12,
+                        "bold" : false,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                },
+                {
+                    "type" : "rect",
+                    "printOn" : "now",
+                    "left" : 130,
+                    "top" : 0,
+                    "width" : 30,
+                    "height" : 8,
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
+                },
+                {
+                    "type" : "label",
+                    "printOn" : "now",
+                    "left" : 135,
+                    "top" : 2,
+                    "width" : 20,
+                    "height" : 8,
+                    "expression" : "$V{subTotal}",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 12,
                         "bold" : false,
                         "underscore" : false,
                         "italic" : false,
@@ -333,9 +490,9 @@
                 {
                     "type" : "rect",
                     "printOn" : "now",
-                    "left" : 0,
+                    "left" : 110,
                     "top" : 0,
-                    "width" : 160,
+                    "width" : 20,
                     "height" : 8,
                     "fill" : {
                         "type" : "transparent",
@@ -353,11 +510,48 @@
                 {
                     "type" : "label",
                     "printOn" : "now",
-                    "left" : 5,
+                    "left" : 115,
                     "top" : 2,
-                    "width" : 50,
+                    "width" : 30,
                     "height" : 6,
-                    "expression" : "Total Employee : 10",
+                    "expression" : "Total :",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 11,
+                        "bold" : true,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false 
+                    } 
+                },
+                {
+                    "type" : "rect",
+                    "printOn" : "now",
+                    "left" : 130,
+                    "top" : 0,
+                    "width" : 30,
+                    "height" : 8,
+                    "fill" : {
+                        "type" : "transparent",
+                        "color" : "#FFFFFF" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#00FF00",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
+                },
+                {
+                    "type" : "label",
+                    "printOn" : "now",
+                    "left" : 135,
+                    "top" : 2,
+                    "width" : 30,
+                    "height" : 6,
+                    "expression" : "$V{total}",
                     "font" : {
                         "name" : "Arial",
                         "size" : 11,
