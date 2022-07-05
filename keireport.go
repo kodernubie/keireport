@@ -14,3 +14,11 @@ func LoadFromFile(fileName string) (*core.Keireport, error) {
 
 	return ret, err
 }
+
+func LoadFromString(templateString, baseDir string) (*core.Keireport, error) {
+
+	ret := &core.Keireport{}
+	err := ret.LoadFromString(templateString, baseDir)
+
+	return ret, err
+}
