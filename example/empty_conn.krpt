@@ -3,63 +3,56 @@
     "orientatation" : "P",
     "unitLength" : "mm",
     "margin" : {
-        "left" : 25.4,
-        "top" : 25.4,
-        "right" : 25.4,
-        "bottom" : 25.4
+        "left" : 0,
+        "top" : 0,
+        "right" : 0,
+        "bottom" : 0
     },
     "datasource" : {
-        "type" : "db",
-        "dbType" : "", 
-        "connStr" : "",
-        "query" : "select gd.good_name, ti.sell_price, ti.amount from trx_items ti left join goods gd on gd.id = ti.good_id  where trx_id = $P{trxId}"
+        "type" : "empty"
     },
     "params" : [
         {
-            "name" : "trxId",
-            "type" : "int",
-            "defaultVal" : 1
+            "name" : "name",
+            "type" : "string",
+            "defaultVal" : "KeiReport"
+        },
+        {
+            "name" : "position",
+            "type" : "string",
+            "defaultVal" : "Developer"
         }
     ],
-    "vars" : [
-        {
-            "name" : "rowNo",
-            "type" : "int",
-            "initialVal" : 0,
-            "expression" : "$V{rowNo} + 1", 
-            "executeOn" : "row"
-        },
-        {
-            "name" : "subTotal",
-            "type" : "int",
-            "initialVal" : 0,
-            "expression" : "$F{sell_price} * $F{amount}", 
-            "executeOn" : "row"
-        },
-        {
-            "name" : "total",
-            "type" : "int",
-            "initialVal" : 0,
-            "expression" : "$V{total} + $V{subTotal}", 
-            "executeOn" : "row"
-        },
-        {
-            "name" : "pageNo",
-            "type" : "int",
-            "initialVal" : 1,
-            "expression" : "$V{pageNo} + 1", 
-            "executeOn" : "page"
-        }
-    ],
+    "vars" : [],
     "bands" : {
         "title" : {
             "height" : 20,
             "autoSize" : true,
             "components" : [
                 {
-                    "type" : "image",
+                    "type" : "rect",
                     "printOn" : "now",
                     "left" : 0,
+                    "top" : 0,
+                    "width" : 210,
+                    "height" : 16,
+                    "fill" : {
+                        "type" : "solid",
+                        "color" : "#0F2CB4" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#0F2CB4",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
+                },
+                {
+                    "type" : "image",
+                    "printOn" : "now",
+                    "left" : 70,
                     "top" : 0,
                     "width" : 15,
                     "height" : 15,
@@ -68,15 +61,33 @@
                 {
                     "type" : "label",
                     "printOn" : "now",
-                    "left" : 20,
-                    "top" : 2,
+                    "left" : 10,
+                    "top" : 25,
                     "width" : 100,
                     "height" : 10,
-                    "expression" : "Variable & Parameter",
+                    "expression" : "Dear $P{name},",
                     "font" : {
                         "name" : "Arial",
                         "size" : 14,
-                        "bold" : true,
+                        "bold" : false,
+                        "underscore" : false,
+                        "italic" : false,
+                        "strikeout" : false,
+                        "color" : "#1D337E" 
+                    } 
+                },
+                {
+                    "type" : "label",
+                    "printOn" : "now",
+                    "left" : 10,
+                    "top" : 33,
+                    "width" : 100,
+                    "height" : 10,
+                    "expression" : "Congratulation! You have accepted at position $P{position}",
+                    "font" : {
+                        "name" : "Arial",
+                        "size" : 11,
+                        "bold" : false,
                         "underscore" : false,
                         "italic" : false,
                         "strikeout" : false 
@@ -85,483 +96,47 @@
                 {
                     "type" : "label",
                     "printOn" : "now",
-                    "left" : 20,
-                    "top" : 8,
+                    "left" : 10,
+                    "top" : 39,
                     "width" : 100,
                     "height" : 10,
-                    "expression" : "Showing parameter and variable execution",
+                    "expression" : "Please come to our office at 1 July 2022 at 08:00",
                     "font" : {
                         "name" : "Arial",
                         "size" : 11,
                         "bold" : false,
                         "underscore" : false,
-                        "italic" : true,
+                        "italic" : false,
                         "strikeout" : false 
                     } 
+                },
+                {
+                    "type" : "rect",
+                    "printOn" : "now",
+                    "left" : 0,
+                    "top" : 281,
+                    "width" : 210,
+                    "height" : 16,
+                    "fill" : {
+                        "type" : "solid",
+                        "color" : "#0F2CB4" 
+                    },
+                    "border" : {
+                        "width" : 0.2,
+                        "color" : "#0F2CB4",
+                        "left" : true,
+                        "top" : true,
+                        "right" : true,
+                        "bottom" : true
+                    }
                 }
             ]
         },
         "header" : {
-            "height" : 8,
-            "autoSize" : true,
-            "components" : [
-                {
-                    "type" : "rect",
-                    "printOn" : "now",
-                    "left" : 0,
-                    "top" : 0,
-                    "width" : 20,
-                    "height" : 8,
-                    "fill" : {
-                        "type" : "transparent",
-                        "color" : "#FFFFFF" 
-                    },
-                    "border" : {
-                        "width" : 0.2,
-                        "color" : "#00FF00",
-                        "left" : true,
-                        "top" : true,
-                        "right" : true,
-                        "bottom" : true
-                    }
-                },
-                {
-                    "type" : "label",
-                    "printOn" : "now",
-                    "left" : 5,
-                    "top" : 2,
-                    "width" : 50,
-                    "height" : 6,
-                    "expression" : "No",
-                    "font" : {
-                        "name" : "Arial",
-                        "size" : 12,
-                        "bold" : true,
-                        "underscore" : false,
-                        "italic" : false,
-                        "strikeout" : false 
-                    } 
-                },
-                {
-                    "type" : "rect",
-                    "printOn" : "now",
-                    "left" : 20,
-                    "top" : 0,
-                    "width" : 60,
-                    "height" : 8,
-                    "fill" : {
-                        "type" : "transparent",
-                        "color" : "#FFFFFF" 
-                    },
-                    "border" : {
-                        "width" : 0.2,
-                        "color" : "#00FF00",
-                        "left" : true,
-                        "top" : true,
-                        "right" : true,
-                        "bottom" : true
-                    }
-                },
-                {
-                    "type" : "label",
-                    "printOn" : "now",
-                    "left" : 25,
-                    "top" : 2,
-                    "width" : 50,
-                    "height" : 6,
-                    "expression" : "Goods Name",
-                    "font" : {
-                        "name" : "Arial",
-                        "size" : 12,
-                        "bold" : true,
-                        "underscore" : false,
-                        "italic" : false,
-                        "strikeout" : false 
-                    } 
-                },
-                {
-                    "type" : "rect",
-                    "printOn" : "now",
-                    "left" : 80,
-                    "top" : 0,
-                    "width" : 30,
-                    "height" : 8,
-                    "fill" : {
-                        "type" : "transparent",
-                        "color" : "#FFFFFF" 
-                    },
-                    "border" : {
-                        "width" : 0.2,
-                        "color" : "#00FF00",
-                        "left" : true,
-                        "top" : true,
-                        "right" : true,
-                        "bottom" : true
-                    }
-                },
-                {
-                    "type" : "label",
-                    "printOn" : "now",
-                    "left" : 85,
-                    "top" : 2,
-                    "width" : 30,
-                    "height" : 6,
-                    "expression" : "Price",
-                    "font" : {
-                        "name" : "Arial",
-                        "size" : 12,
-                        "bold" : true,
-                        "underscore" : false,
-                        "italic" : false,
-                        "strikeout" : false 
-                    } 
-                },
-                {
-                    "type" : "rect",
-                    "printOn" : "now",
-                    "left" : 110,
-                    "top" : 0,
-                    "width" : 20,
-                    "height" : 8,
-                    "fill" : {
-                        "type" : "transparent",
-                        "color" : "#FFFFFF" 
-                    },
-                    "border" : {
-                        "width" : 0.2,
-                        "color" : "#00FF00",
-                        "left" : true,
-                        "top" : true,
-                        "right" : true,
-                        "bottom" : true
-                    }
-                },
-                {
-                    "type" : "label",
-                    "printOn" : "now",
-                    "left" : 115,
-                    "top" : 2,
-                    "width" : 20,
-                    "height" : 8,
-                    "expression" : "Amnt",
-                    "font" : {
-                        "name" : "Arial",
-                        "size" : 12,
-                        "bold" : true,
-                        "underscore" : false,
-                        "italic" : false,
-                        "strikeout" : false 
-                    } 
-                },
-                {
-                    "type" : "rect",
-                    "printOn" : "now",
-                    "left" : 130,
-                    "top" : 0,
-                    "width" : 30,
-                    "height" : 8,
-                    "fill" : {
-                        "type" : "transparent",
-                        "color" : "#FFFFFF" 
-                    },
-                    "border" : {
-                        "width" : 0.2,
-                        "color" : "#00FF00",
-                        "left" : true,
-                        "top" : true,
-                        "right" : true,
-                        "bottom" : true
-                    }
-                },
-                {
-                    "type" : "label",
-                    "printOn" : "now",
-                    "left" : 135,
-                    "top" : 2,
-                    "width" : 20,
-                    "height" : 8,
-                    "expression" : "Sub Total",
-                    "font" : {
-                        "name" : "Arial",
-                        "size" : 12,
-                        "bold" : true,
-                        "underscore" : false,
-                        "italic" : false,
-                        "strikeout" : false 
-                    } 
-                }
-            ]
         },
         "detail" : {
-            "height" : 8,
-            "autoSize" : true,
-            "components" : [
-                {
-                    "type" : "rect",
-                    "printOn" : "now",
-                    "left" : 0,
-                    "top" : 0,
-                    "width" : 20,
-                    "height" : 8,
-                    "fill" : {
-                        "type" : "transparent",
-                        "color" : "#FFFFFF" 
-                    },
-                    "border" : {
-                        "width" : 0.2,
-                        "color" : "#00FF00",
-                        "left" : true,
-                        "top" : true,
-                        "right" : true,
-                        "bottom" : true
-                    }
-                },
-                {
-                    "type" : "label",
-                    "printOn" : "now",
-                    "left" : 5,
-                    "top" : 2,
-                    "width" : 50,
-                    "height" : 6,
-                    "expression" : "$V{rowNo}",
-                    "font" : {
-                        "name" : "Arial",
-                        "size" : 12,
-                        "bold" : false,
-                        "underscore" : false,
-                        "italic" : false,
-                        "strikeout" : false 
-                    } 
-                },
-                {
-                    "type" : "rect",
-                    "printOn" : "now",
-                    "left" : 20,
-                    "top" : 0,
-                    "width" : 60,
-                    "height" : 8,
-                    "fill" : {
-                        "type" : "transparent",
-                        "color" : "#FFFFFF" 
-                    },
-                    "border" : {
-                        "width" : 0.2,
-                        "color" : "#00FF00",
-                        "left" : true,
-                        "top" : true,
-                        "right" : true,
-                        "bottom" : true
-                    }
-                },
-                {
-                    "type" : "label",
-                    "printOn" : "now",
-                    "left" : 25,
-                    "top" : 2,
-                    "width" : 50,
-                    "height" : 6,
-                    "expression" : "$F{good_name}",
-                    "font" : {
-                        "name" : "Arial",
-                        "size" : 11,
-                        "bold" : false,
-                        "underscore" : false,
-                        "italic" : false,
-                        "strikeout" : false 
-                    } 
-                },
-                {
-                    "type" : "rect",
-                    "printOn" : "now",
-                    "left" : 80,
-                    "top" : 0,
-                    "width" : 30,
-                    "height" : 8,
-                    "fill" : {
-                        "type" : "transparent",
-                        "color" : "#FFFFFF" 
-                    },
-                    "border" : {
-                        "width" : 0.2,
-                        "color" : "#00FF00",
-                        "left" : true,
-                        "top" : true,
-                        "right" : true,
-                        "bottom" : true
-                    }
-                },
-                {
-                    "type" : "label",
-                    "printOn" : "now",
-                    "left" : 85,
-                    "top" : 2,
-                    "width" : 30,
-                    "height" : 6,
-                    "expression" : "$F{sell_price}",
-                    "font" : {
-                        "name" : "Arial",
-                        "size" : 12,
-                        "bold" : false,
-                        "underscore" : false,
-                        "italic" : false,
-                        "strikeout" : false 
-                    } 
-                },
-                {
-                    "type" : "rect",
-                    "printOn" : "now",
-                    "left" : 110,
-                    "top" : 0,
-                    "width" : 20,
-                    "height" : 8,
-                    "fill" : {
-                        "type" : "transparent",
-                        "color" : "#FFFFFF" 
-                    },
-                    "border" : {
-                        "width" : 0.2,
-                        "color" : "#00FF00",
-                        "left" : true,
-                        "top" : true,
-                        "right" : true,
-                        "bottom" : true
-                    }
-                },
-                {
-                    "type" : "label",
-                    "printOn" : "now",
-                    "left" : 115,
-                    "top" : 2,
-                    "width" : 20,
-                    "height" : 8,
-                    "expression" : "$F{amount}",
-                    "font" : {
-                        "name" : "Arial",
-                        "size" : 12,
-                        "bold" : false,
-                        "underscore" : false,
-                        "italic" : false,
-                        "strikeout" : false 
-                    } 
-                },
-                {
-                    "type" : "rect",
-                    "printOn" : "now",
-                    "left" : 130,
-                    "top" : 0,
-                    "width" : 30,
-                    "height" : 8,
-                    "fill" : {
-                        "type" : "transparent",
-                        "color" : "#FFFFFF" 
-                    },
-                    "border" : {
-                        "width" : 0.2,
-                        "color" : "#00FF00",
-                        "left" : true,
-                        "top" : true,
-                        "right" : true,
-                        "bottom" : true
-                    }
-                },
-                {
-                    "type" : "label",
-                    "printOn" : "now",
-                    "left" : 135,
-                    "top" : 2,
-                    "width" : 20,
-                    "height" : 8,
-                    "expression" : "$V{subTotal}",
-                    "font" : {
-                        "name" : "Arial",
-                        "size" : 12,
-                        "bold" : false,
-                        "underscore" : false,
-                        "italic" : false,
-                        "strikeout" : false 
-                    } 
-                }
-            ]
         },
         "footer" : {
-            "height" : 8,
-            "autoSize" : true,
-            "components" : [
-                {
-                    "type" : "rect",
-                    "printOn" : "now",
-                    "left" : 110,
-                    "top" : 0,
-                    "width" : 20,
-                    "height" : 8,
-                    "fill" : {
-                        "type" : "transparent",
-                        "color" : "#FFFFFF" 
-                    },
-                    "border" : {
-                        "width" : 0.2,
-                        "color" : "#00FF00",
-                        "left" : true,
-                        "top" : true,
-                        "right" : true,
-                        "bottom" : true
-                    }
-                },
-                {
-                    "type" : "label",
-                    "printOn" : "now",
-                    "left" : 115,
-                    "top" : 2,
-                    "width" : 30,
-                    "height" : 6,
-                    "expression" : "Total :",
-                    "font" : {
-                        "name" : "Arial",
-                        "size" : 11,
-                        "bold" : true,
-                        "underscore" : false,
-                        "italic" : false,
-                        "strikeout" : false 
-                    } 
-                },
-                {
-                    "type" : "rect",
-                    "printOn" : "now",
-                    "left" : 130,
-                    "top" : 0,
-                    "width" : 30,
-                    "height" : 8,
-                    "fill" : {
-                        "type" : "transparent",
-                        "color" : "#FFFFFF" 
-                    },
-                    "border" : {
-                        "width" : 0.2,
-                        "color" : "#00FF00",
-                        "left" : true,
-                        "top" : true,
-                        "right" : true,
-                        "bottom" : true
-                    }
-                },
-                {
-                    "type" : "label",
-                    "printOn" : "now",
-                    "left" : 135,
-                    "top" : 2,
-                    "width" : 30,
-                    "height" : 6,
-                    "expression" : "$V{total}",
-                    "font" : {
-                        "name" : "Arial",
-                        "size" : 11,
-                        "bold" : true,
-                        "underscore" : false,
-                        "italic" : false,
-                        "strikeout" : false 
-                    } 
-                }
-            ]
         }
     }
 }

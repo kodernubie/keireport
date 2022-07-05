@@ -1,6 +1,8 @@
 package pdf
 
 import (
+	"strconv"
+
 	"github.com/kodernubie/keireport/component"
 	"github.com/kodernubie/keireport/core"
 )
@@ -40,6 +42,20 @@ func (o *LabelExporter) Export(report *core.Keireport, exporter *PDFExporter, co
 
 		exporter.pdf.SetFont(label.Font.Name, style, label.Font.Size)
 		exporter.pdf.SetXY(report.Margin.Left+label.Left, exporter.curBandTop+label.Top)
+
+		var r int64 = 0
+		var g int64 = 0
+		var b int64 = 0
+
+		if label.Font.Color != "" {
+			//#001122
+			//0123456
+			r, _ = strconv.ParseInt(label.Font.Color[1:3], 16, 64)
+			g, _ = strconv.ParseInt(label.Font.Color[3:5], 16, 64)
+			b, _ = strconv.ParseInt(label.Font.Color[5:7], 16, 64)
+		}
+
+		exporter.pdf.SetTextColor(int(r), int(g), int(b))
 
 		border := ""
 

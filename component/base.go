@@ -57,6 +57,7 @@ func (o *Base) GetPrintOn() string {
 
 type Font struct {
 	Name       string
+	Color      string
 	Size       float64
 	Bold       bool
 	Underscore bool
@@ -69,6 +70,7 @@ func (o *Font) Init(config map[string]interface{}) {
 	if config != nil {
 
 		o.Name = util.GetString("name", config, o.Name)
+		o.Color = util.GetString("color", config, o.Color)
 		o.Size = util.GetFloat("size", config, o.Size)
 		o.Bold = util.GetBool("bold", config, o.Bold)
 		o.Underscore = util.GetBool("underscore", config, o.Underscore)

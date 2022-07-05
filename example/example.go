@@ -15,7 +15,8 @@ func main() {
 	//Simple()
 	//CustomFont()
 	//ParameterAndVariable()
-	CustomConnection()
+	//CustomConnection()
+	EmptyConnection()
 }
 
 /*
@@ -89,5 +90,26 @@ func CustomConnection() {
 		rpt.GenToFile("variable.pdf")
 
 		fmt.Println("generated to : variable.pdf")
+	}
+}
+
+/*
+	Report without connection to database
+*/
+func EmptyConnection() {
+
+	rpt, err := keireport.LoadFromFile("empty_conn.krpt")
+
+	if err == nil {
+
+		rpt.SetParam("name", "Koder Nubie")
+		rpt.SetParam("positon", "Senior Golang Developer")
+
+		rpt.GenToFile("empty_conn.pdf")
+
+		fmt.Println("generated to : empty_conn.pdf")
+	} else {
+
+		fmt.Println("Error : ", err)
 	}
 }

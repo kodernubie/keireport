@@ -61,7 +61,7 @@ func (o *Margin) Init(config map[string]interface{}) {
 
 	if config != nil {
 
-		o.Left = util.GetFloat("name", config, 25.4)
+		o.Left = util.GetFloat("left", config, 25.4)
 		o.Top = util.GetFloat("top", config, 25.4)
 		o.Right = util.GetFloat("right", config, 25.4)
 		o.Bottom = util.GetFloat("bottom", config, 25.4)
