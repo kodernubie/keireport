@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+// Run Single Test : go test -run TestSimple
+
 func TestSimple(t *testing.T) {
 
 	rpt, err := LoadFromFile("example/simple.krpt")
@@ -49,6 +51,8 @@ func TestVariable(t *testing.T) {
 	rpt.Debug = true
 
 	if err == nil {
+
+		rpt.SetParam("trxId", 2)
 
 		err = rpt.GenToFile("example/variable.pdf")
 

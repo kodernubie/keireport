@@ -9,10 +9,14 @@ import (
 
 var ErrEndOfRow = errors.New("End of row")
 var regexField *regexp.Regexp
+var regexParam *regexp.Regexp
+var regexVar *regexp.Regexp
 
 func init() {
 
 	regexField, _ = regexp.Compile(`\$F\{[A-Za-z1-90_]+\}`)
+	regexParam, _ = regexp.Compile(`\$P\{[A-Za-z1-90_]+\}`)
+	regexVar, _ = regexp.Compile(`\$V\{[A-Za-z1-90_]+\}`)
 }
 
 type Component interface {

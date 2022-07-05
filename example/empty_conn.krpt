@@ -10,8 +10,8 @@
     },
     "datasource" : {
         "type" : "db",
-        "dbType" : "postgresql", 
-        "connStr" : "user=postgres password=admin host=localhost dbname=keisample port=5432 sslmode=disable TimeZone=Asia/Jakarta",
+        "dbType" : "", 
+        "connStr" : "",
         "query" : "select gd.good_name, ti.sell_price, ti.amount from trx_items ti left join goods gd on gd.id = ti.good_id  where trx_id = $P{trxId}"
     },
     "params" : [
