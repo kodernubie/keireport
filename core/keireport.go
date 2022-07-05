@@ -1,6 +1,7 @@
 package core
 
 import (
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -15,40 +16,125 @@ import (
 )
 
 type Keireport struct {
-	BaseDir      string
-	Debug        bool
-	TemplateFile string
-	UnitLength   string
-	PageSize     string
-	PageWidth    float64
-	PageHeight   float64
-	Orientation  string
-	Margin       *Margin
-	Params       []*Parameter
-	Vars         []*Variable
-	MaxHeight    float64
-	Template     map[string]interface{}
-	CurrRow      map[string]interface{}
-	Fonts        map[string]string
-	DataSource   DataSource
-	Pages        []*Page
-	CurrentPage  *Page
+	BaseDir     string
+	SQLDB       *sql.DB
+	Debug       bool
+	UnitLength  string
+	PageSize    string
+	PageWidth   float64
+	PageHeight  float64
+	Orientation string
+	Margin      *Margin
+	Params      []*Parameter
+	Vars        []*Variable
+	MaxHeight   float64
+	Template    map[string]interface{}
+	CurrRow     map[string]interface{}
+	Fonts       map[string]string
+	DataSource  DataSource
+	Pages       []*Page
+	CurrentPage *Page
 }
 
 func (o *Keireport) GetResource(fileName string) string {
 
-	baseDir := o.BaseDir
+	return filepath.Join(o.BaseDir, fileName)
+}
 
-	if o.TemplateFile != "" {
+func (o *Keireport) LoadFromString(templateString, baseDir string) error {
 
-		baseDir, _ = filepath.Abs(filepath.Dir(o.TemplateFile))
-	} else if baseDir == "" {
+	var err error
 
-		baseDir, _ = os.Getwd()
-		baseDir, _ = filepath.Abs(baseDir)
+	o.BaseDir = baseDir
+
+	b := []byte(templateString)
+
+	err = json.Unmarshal(b, &o.Template)
+
+	if err != nil {
+
+		if o.Debug {
+			fmt.Println("Error loading design from file :", err)
+		}
+
+		return err
 	}
 
-	return filepath.Join(baseDir, fileName)
+	// global config
+	o.PageSize = util.GetString("pageSize", o.Template, "A4")
+	o.Orientation = util.GetString("orientation", o.Template, "P")
+	o.UnitLength = util.GetString("unitLength", o.Template, "mm")
+
+	switch o.PageSize {
+	case "A4":
+		switch o.UnitLength {
+		case "mm":
+			o.PageWidth = 210
+			o.PageHeight = 297
+		}
+	case "A5":
+		switch o.UnitLength {
+		case "mm":
+			o.PageWidth = 148
+			o.PageHeight = 210
+		}
+	}
+
+	o.Margin = &Margin{
+		Left:   25.4,
+		Top:    25.4,
+		Right:  25.4,
+		Bottom: 25.4,
+	}
+
+	o.Margin.Init(util.GetMap("margin", o.Template))
+
+	o.MaxHeight = o.PageHeight - o.Margin.Top - o.Margin.Bottom
+
+	o.Fonts = map[string]string{}
+	fontList := util.GetMap("fonts", o.Template)
+
+	for name, target := range fontList {
+
+		targetS, ok := target.(string)
+
+		if ok {
+			o.Fonts[name] = targetS
+		}
+	}
+
+	o.Params = []*Parameter{}
+	paramList := util.GetArr("params", o.Template)
+
+	for _, item := range paramList {
+
+		target, ok := item.(map[string]interface{})
+
+		if ok {
+
+			par := &Parameter{}
+			par.Init(target)
+
+			o.Params = append(o.Params, par)
+		}
+	}
+
+	o.Vars = []*Variable{}
+	varList := util.GetArr("vars", o.Template)
+
+	for _, item := range varList {
+
+		target, ok := item.(map[string]interface{})
+
+		if ok {
+			varO := &Variable{}
+			varO.Init(target)
+
+			o.Vars = append(o.Vars, varO)
+		}
+	}
+
+	return err
 }
 
 func (o *Keireport) LoadFromFile(fileName string) error {
@@ -56,26 +142,20 @@ func (o *Keireport) LoadFromFile(fileName string) error {
 	var err error
 
 	b, err := ioutil.ReadFile(fileName)
-	o.TemplateFile = fileName
 
 	if err != nil {
 
 		// try relative
 		path, _ := os.Getwd()
 
-		b, err = ioutil.ReadFile(path + "/" + fileName)
-
-		o.TemplateFile = path + "/" + fileName
+		fileName = path + "/" + fileName
+		b, err = ioutil.ReadFile(fileName)
 	}
 
 	if err == nil {
 
-		err = json.Unmarshal(b, &o.Template)
-
-		if err != nil {
-
-			fmt.Println("Error loading design from file :", err)
-		}
+		baseDir, _ := filepath.Abs(filepath.Dir(fileName))
+		err = o.LoadFromString(string(b), baseDir)
 	} else {
 
 		fmt.Println("Error loading design from file :", err)
@@ -188,81 +268,6 @@ func (o *Keireport) Build() error {
 
 	var err error
 
-	// global config
-	o.PageSize = util.GetString("pageSize", o.Template, "A4")
-	o.Orientation = util.GetString("orientation", o.Template, "P")
-	o.UnitLength = util.GetString("unitLength", o.Template, "mm")
-
-	switch o.PageSize {
-	case "A4":
-		switch o.UnitLength {
-		case "mm":
-			o.PageWidth = 210
-			o.PageHeight = 297
-		}
-	case "A5":
-		switch o.UnitLength {
-		case "mm":
-			o.PageWidth = 148
-			o.PageHeight = 210
-		}
-	}
-
-	o.Margin = &Margin{
-		Left:   25.4,
-		Top:    25.4,
-		Right:  25.4,
-		Bottom: 25.4,
-	}
-
-	o.Margin.Init(util.GetMap("margin", o.Template))
-
-	o.MaxHeight = o.PageHeight - o.Margin.Top - o.Margin.Bottom
-
-	o.Fonts = map[string]string{}
-	fontList := util.GetMap("fonts", o.Template)
-
-	for name, target := range fontList {
-
-		targetS, ok := target.(string)
-
-		if ok {
-			o.Fonts[name] = targetS
-		}
-	}
-
-	o.Params = []*Parameter{}
-	paramList := util.GetArr("params", o.Template)
-
-	for _, item := range paramList {
-
-		target, ok := item.(map[string]interface{})
-
-		if ok {
-
-			par := &Parameter{}
-			par.Init(target)
-
-			o.Params = append(o.Params, par)
-		}
-	}
-
-	o.Vars = []*Variable{}
-	varList := util.GetArr("vars", o.Template)
-
-	for _, item := range varList {
-
-		target, ok := item.(map[string]interface{})
-
-		if ok {
-			varO := &Variable{}
-			varO.Init(target)
-
-			o.Vars = append(o.Vars, varO)
-		}
-	}
-
-	// data source
 	dsTemplate, _ := o.Template["datasource"].(map[string]interface{})
 
 	if o.DataSource == nil {
@@ -284,7 +289,7 @@ func (o *Keireport) Build() error {
 			}
 		} else {
 
-			err = errors.New("Datasource config is not defined in template")
+			err = errors.New("datasource config is not defined in template")
 		}
 	} else {
 
@@ -414,64 +419,90 @@ func (o *Keireport) Build() error {
 	return err
 }
 
+func (o *Keireport) SetDBConn(db *sql.DB) {
+
+	o.SQLDB = db
+}
+
+func (o *Keireport) SetParam(name string, value interface{}) {
+
+	for _, par := range o.Params {
+
+		if par.Name == name {
+
+			par.Value = value
+			break
+		}
+	}
+}
+
 func (o *Keireport) ReplaceString(data string) string {
 
 	target := data
 
-	if o.CurrRow == nil {
+	if regexField.Match([]byte(target)) {
 
-		target = regexField.ReplaceAllString(target, "")
-	} else {
+		if o.CurrRow == nil {
 
-		for key, val := range o.CurrRow {
+			target = regexField.ReplaceAllString(target, "")
+		} else {
+
+			for key, val := range o.CurrRow {
+
+				valStr := ""
+
+				switch val.(type) {
+				case float64:
+					valStr = fmt.Sprintf("%f", val.(float64))
+				case float32:
+					valStr = fmt.Sprintf("%f", val.(float32))
+				case time.Time:
+					valStr = val.(time.Time).Format("2006-01-02")
+				default:
+					valStr = fmt.Sprintf("%v", val)
+				}
+
+				target = strings.ReplaceAll(target, "$F{"+key+"}", valStr)
+			}
+		}
+	}
+
+	if regexVar.Match([]byte(target)) {
+
+		for _, val := range o.Vars {
 
 			valStr := ""
 
-			switch val.(type) {
-			case float64:
-				valStr = fmt.Sprintf("%f", val.(float64))
-			case float32:
-				valStr = fmt.Sprintf("%f", val.(float32))
-			case time.Time:
-				valStr = val.(time.Time).Format("2006-01-02")
+			switch val.Type {
+			case "float":
+				valStr = fmt.Sprintf("%f", val.GetFloat())
+			// case "time":
+			// 	valStr = val.GetTime().Format("2006-01-02")
 			default:
-				valStr = fmt.Sprintf("%v", val)
+				valStr = fmt.Sprintf("%v", val.Value)
 			}
 
-			target = strings.ReplaceAll(target, "$F{"+key+"}", valStr)
+			target = strings.ReplaceAll(target, "$V{"+val.Name+"}", valStr)
 		}
 	}
 
-	for _, val := range o.Vars {
+	if regexParam.Match([]byte(target)) {
 
-		valStr := ""
+		for _, val := range o.Params {
 
-		switch val.Type {
-		case "float":
-			valStr = fmt.Sprintf("%f", val.GetFloat())
-		// case "time":
-		// 	valStr = val.GetTime().Format("2006-01-02")
-		default:
-			valStr = fmt.Sprintf("%v", val.Value)
+			valStr := ""
+
+			switch val.Type {
+			case "float":
+				valStr = fmt.Sprintf("%f", val.GetFloat())
+			// case "time":
+			// 	valStr = val.GetTime().Format("2006-01-02")
+			default:
+				valStr = fmt.Sprintf("%v", val.Value)
+			}
+
+			target = strings.ReplaceAll(target, "$P{"+val.Name+"}", valStr)
 		}
-
-		target = strings.ReplaceAll(target, "$V{"+val.Name+"}", valStr)
-	}
-
-	for _, val := range o.Params {
-
-		valStr := ""
-
-		switch val.Type {
-		case "float":
-			valStr = fmt.Sprintf("%f", val.GetFloat())
-		// case "time":
-		// 	valStr = val.GetTime().Format("2006-01-02")
-		default:
-			valStr = fmt.Sprintf("%v", val.Value)
-		}
-
-		target = strings.ReplaceAll(target, "$P{"+val.Name+"}", valStr)
 	}
 
 	return target

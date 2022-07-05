@@ -3,6 +3,8 @@ package datasource
 import (
 	"database/sql"
 	"errors"
+	"fmt"
+	"reflect"
 
 	"github.com/kodernubie/keireport/core"
 	"github.com/kodernubie/keireport/util"
@@ -55,14 +57,30 @@ func (o *DBDatasource) Next(rpt *core.Keireport) (map[string]interface{}, error)
 
 	if o.Rows == nil {
 
+		fmt.Println("=====> ", rpt.SQLDB)
+		if rpt.SQLDB != nil {
+
+			fmt.Printf("%T\r\n", rpt.SQLDB.Driver())
+			fmt.Println("====>", reflect.TypeOf(rpt.SQLDB.Driver()).String())
+		}
+
+		//o.RawConn = rpt.SQLDB
 		err = o.init()
 
 		if err == nil {
 
 			o.Rows = []map[string]interface{}{}
 
-			err = o.Conn.Debug().
-				Raw(o.Query).
+			targetSQL := rpt.ReplaceString(o.Query)
+
+			tx := o.Conn
+
+			if rpt.Debug {
+
+				tx = tx.Debug()
+			}
+
+			err = tx.Raw(targetSQL).
 				Find(&o.Rows).
 				Error
 
