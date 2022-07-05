@@ -33,8 +33,8 @@ func (o *RectExporter) Export(report *core.Keireport, exporter *PDFExporter, com
 				//#001122
 				//0123456
 				r, _ = strconv.ParseInt(rect.Fill.Color[1:3], 16, 64)
-				g, _ = strconv.ParseInt(rect.Fill.Color[3:3], 16, 64)
-				b, _ = strconv.ParseInt(rect.Fill.Color[1:3], 16, 64)
+				g, _ = strconv.ParseInt(rect.Fill.Color[3:5], 16, 64)
+				b, _ = strconv.ParseInt(rect.Fill.Color[5:7], 16, 64)
 			}
 
 			exporter.pdf.SetFillColor(int(r), int(g), int(b))
@@ -46,9 +46,9 @@ func (o *RectExporter) Export(report *core.Keireport, exporter *PDFExporter, com
 
 			//#001122
 			//0123456
-			r, _ = strconv.ParseInt(rect.Border.Color[1:3], 16, 64)
-			g, _ = strconv.ParseInt(rect.Border.Color[3:3], 16, 64)
-			b, _ = strconv.ParseInt(rect.Border.Color[1:3], 16, 64)
+			r, _ = strconv.ParseInt(rect.Fill.Color[1:3], 16, 64)
+			g, _ = strconv.ParseInt(rect.Fill.Color[3:5], 16, 64)
+			b, _ = strconv.ParseInt(rect.Fill.Color[5:7], 16, 64)
 		} else {
 
 			r = 0
