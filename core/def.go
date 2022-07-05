@@ -70,6 +70,13 @@ func (o *Margin) Init(config map[string]interface{}) {
 
 //-------------------------------------------
 
+type ResourceItem struct {
+	Data []byte
+	Mime string
+}
+
+//-------------------------------------------
+
 type Parameter struct {
 	Name       string
 	Type       string

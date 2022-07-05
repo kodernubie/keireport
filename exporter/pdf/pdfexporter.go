@@ -48,7 +48,7 @@ func (o *PDFExporter) doExport(report *core.Keireport) error {
 	// process font
 	for name, target := range report.Fonts {
 
-		targetPath := report.GetResource(target)
+		targetPath := report.GetResourceFileName(target)
 
 		mapFile := filepath.Join(o.tempDir, "cp1252.map")
 		os.WriteFile(mapFile, []byte(encStr["cp1252"]), 0644)

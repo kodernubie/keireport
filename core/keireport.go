@@ -34,11 +34,32 @@ type Keireport struct {
 	DataSource  DataSource
 	Pages       []*Page
 	CurrentPage *Page
+	Resources   map[string]ResourceItem
 }
 
-func (o *Keireport) GetResource(fileName string) string {
+func (o *Keireport) GetResourceFileName(fileName string) string {
 
 	return filepath.Join(o.BaseDir, fileName)
+}
+
+func (o *Keireport) GetResource(name string) ([]byte, string) {
+
+	res, ok := o.Resources[name]
+
+	if ok {
+
+		return res.Data, res.Mime
+	}
+
+	return nil, ""
+}
+
+func (o *Keireport) AddResource(name, mime string, data []byte) {
+
+	o.Resources[name] = ResourceItem{
+		Mime: mime,
+		Data: data,
+	}
 }
 
 func (o *Keireport) LoadFromString(templateString, baseDir string) error {
@@ -133,6 +154,8 @@ func (o *Keireport) LoadFromString(templateString, baseDir string) error {
 			o.Vars = append(o.Vars, varO)
 		}
 	}
+
+	o.Resources = map[string]ResourceItem{}
 
 	return err
 }
