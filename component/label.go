@@ -12,6 +12,8 @@ type Label struct {
 	AlignHor   string
 	Value      string
 	Expression string
+	WordWrap   bool
+	LineHeight float64
 	Border     *Border
 }
 
@@ -26,6 +28,8 @@ func (o *LabelBuilder) Build(template map[string]interface{}, rpt *core.Keirepor
 	ret.Expression = util.GetString("expression", template)
 	ret.AlignHor = util.GetString("alignHor", template, "left")
 	ret.AlignVer = util.GetString("alignVer", template, "top")
+	ret.WordWrap = util.GetBool("wordWrap", template, false)
+	ret.LineHeight = util.GetFloat("lineHeight", template, 6)
 
 	ret.Font = &Font{
 		Name:       "Arial",
