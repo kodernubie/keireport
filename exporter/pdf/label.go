@@ -100,7 +100,14 @@ func (o *LabelExporter) Export(report *core.Keireport, exporter *PDFExporter, co
 		}
 
 		fill := false
-		exporter.pdf.CellFormat(label.Width, label.Height, label.Value, border, 1, align, fill, 0, "")
+
+		if label.WordWrap {
+
+			exporter.pdf.MultiCell(label.Width, label.LineHeight, label.Value, border, align, fill)
+		} else {
+
+			exporter.pdf.CellFormat(label.Width, label.Height, label.Value, border, 1, align, fill, 0, "")
+		}
 	}
 
 	return err
